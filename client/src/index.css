@@ -1,0 +1,97 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@400;500;600;700&display=swap');
+
+:root {
+  /* AI STUDENT GUIDE HUB - Light Mode Premium Palette */
+  --bg-deep: #f8fafc;
+  /* Super Light Slate */
+  --bg-surface: #ffffff;
+  /* Pure White */
+  --card-bg: #ffffff;
+  --card-hover: #f1f5f9;
+
+  /* Vibrant Accents */
+  --learning: #2563eb;
+  /* Blue-600 */
+  --progress: #16a34a;
+  /* Green-600 */
+  --intelligence: #7c3aed;
+  /* Purple-600 */
+
+  --accent: var(--learning);
+  --secondary: var(--intelligence);
+  --accent-glow: rgba(37, 99, 235, 0.08);
+  --secondary-glow: rgba(124, 58, 237, 0.08);
+
+  --text-main: #0f172a;
+  /* Slate-900 */
+  --text-muted: #475569;
+  /* Slate-600 */
+  --text-dim: #64748b;
+  /* Slate-500 */
+
+  --border-subtle: rgba(0, 0, 0, 0.06);
+  --border-glow: rgba(37, 99, 235, 0.15);
+
+  --danger: #dc2626;
+  /* Red-600 */
+  --success: var(--progress);
+  --warning: #d97706;
+  /* Amber-600 */
+
+  /* Layout & Dynamics */
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 20px;
+  --radius-pill: 9999px;
+
+  --glass: blur(12px) saturate(180%);
+  --shadow-sm: 0 1px 3px 0 rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+  --shadow-premium: 0 10px 30px -5px rgba(37, 99, 235, 0.1);
+
+  --transition-smooth: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-bounce: 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  background-color: var(--bg-deep);
+  color: var(--text-main);
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+  line-height: 1.5;
+}
+
+h1,
+h2,
+h3,
+.title,
+.card-title {
+  font-family: 'Outfit', sans-serif;
+  letter-spacing: -0.02em;
+}
+
+/* Base Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--bg-deep);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--border-subtle);
+  border-radius: var(--radius-pill);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--text-dim);
+}

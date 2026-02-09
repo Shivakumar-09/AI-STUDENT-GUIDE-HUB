@@ -1,0 +1,7 @@
+fastapi
+uvicorn
+pypdf2
+python-multipart
+transformers
+torch
+openai
