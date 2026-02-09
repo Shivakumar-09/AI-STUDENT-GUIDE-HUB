@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import axios from "axios";
+import API_URL from '../config/api';
 import { motion, AnimatePresence } from "framer-motion";
 import { UploadCloud, FileText, Sparkles, CheckCircle, AlertTriangle, Copy } from "lucide-react";
 
@@ -24,7 +25,7 @@ const ResumeAnalyzer = () => {
         try {
             // Updated port to 5000 based on standard setup, or keep 8000 if python backend is used
             const res = await axios.post(
-                "http://localhost:5000/api/resume-analyze",
+                `${API_URL}/api/resume-analyze`,
                 formData,
                 { headers: { "Content-Type": "multipart/form-data" } }
             );

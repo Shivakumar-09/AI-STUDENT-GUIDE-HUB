@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import { motion, AnimatePresence } from 'framer-motion';
+import API_URL from '../config/api';
 
 const Auth = ({ onLogin }) => {
     const [isLogin, setIsLogin] = useState(true);
@@ -21,7 +22,7 @@ const Auth = ({ onLogin }) => {
 
         const endpoint = isLogin ? '/api/auth/login' : '/api/auth/register';
         try {
-            const response = await axios.post(`http://localhost:5000${endpoint}`, formData);
+            const response = await axios.post(`${API_URL}${endpoint}`, formData);
             localStorage.setItem('token', response.data.token);
             localStorage.setItem('user', JSON.stringify(response.data.user));
             onLogin(response.data.user);

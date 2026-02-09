@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
+import API_URL from '../config/api';
 // eslint-disable-next-line no-unused-vars
 import { motion, AnimatePresence } from "framer-motion";
 import { Trophy, Timer, CheckCircle, ArrowRight, Activity, Zap } from "lucide-react";
@@ -49,7 +50,7 @@ const Quiz = () => {
 
     const fetchLeaderboard = async () => {
         try {
-            const res = await axios.get("http://localhost:5000/api/leaderboard");
+            const res = await axios.get(`${API_URL}/api/leaderboard`);
             setLeaderboard(res.data);
         } catch (e) { console.error("Leaderboard fetch failed", e); }
     };
@@ -68,7 +69,7 @@ const Quiz = () => {
         setScore(sc);
 
         try {
-            await axios.post("http://localhost:5000/api/leaderboard", {
+            await axios.post(`${API_URL}/api/leaderboard`, {
                 name: userName,
                 score: sc,
             });

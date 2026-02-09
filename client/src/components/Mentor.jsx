@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
 import { motion, AnimatePresence } from 'framer-motion';
+import API_URL from '../config/api';
 
 const Mentor = () => {
     const [messages, setMessages] = useState([
@@ -44,7 +45,7 @@ const Mentor = () => {
                 parts: [{ text: msg.text }]
             }));
 
-            const response = await axios.post('http://localhost:5000/api/ai/mentor', {
+            const response = await axios.post(`${API_URL}/api/ai/mentor`, {
                 history: [...history, { role: 'user', parts: [{ text: messageText }] }],
                 question: messageText,
                 ...options // Keep options if they are still relevant for the new API endpoint

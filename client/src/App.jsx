@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Routes, Route, Navigate, useNavigate, useLocation } from 'react-router-dom';
+import API_URL from './config/api';
 import './App.css';
 import AppShell from './components/AppShell';
 import Dashboard from './components/Dashboard';
@@ -23,7 +24,7 @@ function App() {
       const token = localStorage.getItem('token');
       if (token) {
         try {
-          const res = await axios.get('http://localhost:5000/api/profile', {
+          const res = await axios.get(`${API_URL}/api/profile`, {
             headers: { Authorization: `Bearer ${token}` }
           });
           setUser(res.data);
