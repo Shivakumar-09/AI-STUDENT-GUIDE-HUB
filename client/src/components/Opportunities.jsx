@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Briefcase, Trophy } from 'lucide-react';
+import API_URL from '../config/api';
 
 const Opportunities = () => {
     const [type, setType] = useState('internships');
@@ -19,7 +20,7 @@ const Opportunities = () => {
         const fetchData = async () => {
             try {
                 // Fetch Internships
-                const internRes = await fetch('http://localhost:8000/api/live-internships');
+                const internRes = await fetch(`${API_URL}/api/live-internships`);
                 const internData = await internRes.json();
 
                 // Map API data to component format
@@ -37,7 +38,7 @@ const Opportunities = () => {
                 setInternships(formattedInternships);
 
                 // Fetch Hackathons
-                const hackRes = await fetch('http://localhost:8000/api/live-hackathons');
+                const hackRes = await fetch(`${API_URL}/api/live-hackathons`);
                 const hackData = await hackRes.json();
 
                 // Map API data to component format

@@ -31,19 +31,8 @@ const ResumeAnalyzer = () => {
             );
             setAnalysis(res.data);
         } catch (err) {
-            console.warn("Primary API failed, trying fallback...", err);
-            // Fallback to 8000 if 5000 fails (for python backend)
-            try {
-                const res = await axios.post(
-                    "http://localhost:8000/api/resume-analyze",
-                    formData,
-                    { headers: { "Content-Type": "multipart/form-data" } }
-                );
-                setAnalysis(res.data);
-            } catch (e) {
-                console.error("Fallback API also failed:", e);
-                alert("Could not connect to analysis server. Please ensure backend is running.");
-            }
+            console.error("Resume Analysis Error:", err);
+            alert("Analysis failed. Please try again.");
         } finally {
             setLoading(false);
         }

@@ -31,7 +31,7 @@ const getOpenAIResponse = async (prompt) => {
     try {
         const completion = await openai.chat.completions.create({
             messages: [{ role: "user", content: prompt }],
-        model: "gpt-4o-mini",
+            model: "gpt-4o-mini",
         });
         return completion.choices[0].message.content;
     } catch (error) {
@@ -415,8 +415,154 @@ app.post('/api/leaderboard', async (req, res) => {
 });
 
 // ------------------------
-// Health Check
+// Live Internships API (Migrated from Python)
 // ------------------------
+app.get('/api/live-internships', (req, res) => {
+    const { keyword, track, company_type } = req.query;
+
+    // In a real app, filtering logic would go here based on query params
+
+    const data = [
+        {
+            title: "Customer Solutions Engineer (2026 Batch)",
+            company: "Google",
+            location: "India",
+            stipend: "Full Time",
+            track: "Tech Consultant",
+            apply_url: "https://www.google.com/about/careers/applications/jobs/results/143042321036780230-customer-and-partner-solutions-engineer-university-graduate-2026"
+        },
+        {
+            title: "SDE 1 (2024/2025 Batch)",
+            company: "Licious",
+            location: "India",
+            stipend: "Competitive",
+            track: "Software Development",
+            apply_url: "https://www.linkedin.com/jobs/view/4359065500/"
+        },
+        {
+            title: "AI/Analytics Internship (2026/27 Batch)",
+            company: "Discover Dollar",
+            location: "Remote / Bangalore",
+            stipend: "Stipend Available",
+            track: "Data / AI",
+            apply_url: "https://discoverdollar.keka.com/careers/jobdetails/91847"
+        },
+        {
+            title: "SDE 1 (2023/2024 Batch)",
+            company: "Microsoft",
+            location: "India",
+            stipend: "Competitive",
+            track: "Software Development",
+            apply_url: "http://apply.careers.microsoft.com/careers/job/1970393556652368"
+        },
+        {
+            title: "SDE 2 (Exp required)",
+            company: "Amazon",
+            location: "India",
+            stipend: "High Paying",
+            track: "Software Development",
+            apply_url: "https://www.amazon.jobs/en/jobs/3159335/software-development-engineer-amazon-smart-vehicles"
+        },
+        {
+            title: "Software Engineer (2028 Batch)",
+            company: "Cisco",
+            location: "Bangalore / Hybrid",
+            stipend: "High Paying",
+            track: "Software Development",
+            apply_url: "https://careers.cisco.com/global/en/job/CISCISGLOBAL2006873EXTERNALENGLOBAL/Software-Engineer-Network-Embedded-Application-Development-Intern-India-UHR"
+        },
+        {
+            title: "Product Support Engineer (2026 Batch)",
+            company: "Google",
+            location: "India",
+            stipend: "Competitive",
+            track: "Software / Support",
+            apply_url: "https://www.google.com/about/careers/applications/jobs/results/81631668531536582-product-support-engineer,-university-graduate,-2026"
+        },
+        {
+            title: "SURGE Internship (IIT Kanpur)",
+            company: "IIT Kanpur",
+            location: "Kanpur (On-campus)",
+            stipend: "₹16,000 / ₹8,000",
+            track: "Research / Engineering",
+            apply_url: "https://surge.iitk.ac.in/about"
+        },
+        {
+            title: "SURAJ Internship (IIT Jodhpur)",
+            company: "IIT Jodhpur",
+            location: "Jodhpur",
+            stipend: "₹6,000/month",
+            track: "Research",
+            apply_url: "https://www.iitj.ac.in/suraj/en/eligibility"
+        },
+        {
+            title: "Summer Fellowship (IIT Madras)",
+            company: "IIT Madras",
+            location: "Madras",
+            stipend: "₹15,000/month",
+            track: "Research",
+            apply_url: "https://ssp.iitm.ac.in/summer-fellowship-registration"
+        },
+        {
+            title: "Internship (AI/5G/Compute)",
+            company: "Qualcomm India",
+            location: "India",
+            stipend: "Market Standard",
+            track: "Hardware / AI / Systems",
+            apply_url: "mailto:spanmunu@qti.qualcomm.com?subject=Internship%20Application"
+        }
+    ];
+
+    res.json(data);
+});
+
+// ------------------------
+// Live Hackathons API (Migrated from Python)
+// ------------------------
+app.get('/api/live-hackathons', (req, res) => {
+    const { keyword, type, level } = req.query;
+
+    const data = [
+        {
+            title: "Career Verse (Naukri)",
+            description: "25K+ jobs, 5L+ rewards. 2026-29 Batches.",
+            mode: "Online",
+            perks: "Jobs + Goodies",
+            url: "https://tinyurl.com/naukri-careerverse"
+        },
+        {
+            title: "DecodeX (NL Dalmia)",
+            description: "Coding challenge for 2026/2027 batch. 1.75L Prizes.",
+            mode: "Online",
+            perks: "Cash + PPI",
+            url: "https://tinyurl.com/decodex-nldalmia"
+        },
+        {
+            title: "Synthesis (NL Dalmia)",
+            description: "Tech challenge for all years. 1.05L Prizes.",
+            mode: "Online",
+            perks: "Cash + PPI",
+            url: "https://tinyurl.com/syntehsis-nldalmia"
+        },
+        {
+            title: "Seed Global Profile Eval",
+            description: "Free profile evaluation for US jobs/internships.",
+            mode: "Online",
+            perks: "Free Evaluation",
+            url: "https://seedglobal.io/f168ceec7"
+        },
+        {
+            title: "Seed Global Meetup",
+            description: "Scholarship & Free Event in Delhi/Mumbai/Bangalore/Indore.",
+            mode: "In-Person",
+            perks: "Scholarship + Networking",
+            url: "https://seedglobal.io/arsh"
+        }
+    ];
+
+    res.json(data);
+});
+
 app.get('/api/health', (req, res) => {
     res.json({ status: 'ok', message: 'Road2Success Backend is running' });
 });
