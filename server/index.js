@@ -1,7 +1,6 @@
 // index.js
 require('dotenv').config();
 const express = require('express');
-const mongoose = require('mongoose');
 const cors = require('cors');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
@@ -9,83 +8,62 @@ const http = require('http');
 const { Server } = require('socket.io');
 const path = require('path');
 
-const { GoogleGenerativeAI } = require("@google/generative-ai");
+const { OpenAI } = require("openai");
 
-// ------------------------
-// MONGODB SCHEMAS
-// ------------------------
-const StudentSchema = new mongoose.Schema({
-    name: { type: String, required: true },
-    email: { type: String, required: true, unique: true },
-    password: { type: String, required: true },
-    phone: { type: String },
-    year: { type: String },
-    track: { type: String },
-    skills: { type: [String], default: [] },
-    targetJobs: { type: [String], default: [] },
-    progress: {
-        prog: { type: Number, default: 0 },
-        dsa: { type: Number, default: 0 },
-        web: { type: Number, default: 0 },
-        proj: { type: Number, default: 0 },
-        dbms: { type: Number, default: 0 },
-        interview: { type: Number, default: 0 },
-    },
-    quizScores: [{
-        score: Number,
-        total: Number,
-        date: { type: Date, default: Date.now }
-    }]
-});
+const { sequelize, User, QuizScore, Leaderboard } = require('./models');
 
-const LeaderboardSchema = new mongoose.Schema({
-    name: String,
-    score: Number,
-    date: { type: Date, default: Date.now }
-});
-
-const Student = mongoose.model('Student', StudentSchema);
-const Leaderboard = mongoose.model('Leaderboard', LeaderboardSchema);
+// Sync Database
+sequelize.sync({ alter: true }) // 'alter' updates tables if they exist
+    .then(() => console.log('PostgreSQL Database Synced'))
+    .catch(err => console.error('Database sync error:', err));
 
 // ------------------------
 // GEMINI AI CONFIG
 // ------------------------
-const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
-const model = genAI.getGenerativeModel({
-    model: "gemini-1.5-flash",
+// ------------------------
+// OPENAI CONFIG
+// ------------------------
+const openai = new OpenAI({
+    apiKey: process.env.OPENAI_API_KEY,
 });
 
-const getGeminiResponse = async (prompt) => {
+const getOpenAIResponse = async (prompt) => {
     try {
-        const result = await model.generateContent(prompt);
-        return result.response.text();
-    } catch (error) {
-        console.error("Gemini API Error details:", {
-            message: error.message,
-            stack: error.stack,
-            response: error.response?.data
+        const completion = await openai.chat.completions.create({
+            messages: [{ role: "user", content: prompt }],
+        model: "gpt-4o-mini",
         });
+        return completion.choices[0].message.content;
+    } catch (error) {
+        console.error("OpenAI API Error details:", error.message);
         throw error;
     }
 };
 
-const getGeminiChatResponse = async (history, message) => {
-    let validHistory = [];
+const getOpenAIChatResponse = async (history, message) => {
     try {
-        validHistory = Array.isArray(history) ? history.filter(h => h.role && h.parts) : [];
-        while (validHistory.length > 0 && validHistory[0].role !== "user") {
-            validHistory.shift();
+        // Convert Gemini-style history to OpenAI format if needed, 
+        // but for now we'll just append the new message to a clean slate or basic history.
+        // If history comes in as [{role, parts}], we need to map it.
+        // OpenAI expects: [{role: "user"|"assistant"|"system", content: "..."}]
+
+        let messages = [];
+        if (Array.isArray(history)) {
+            messages = history.map(h => ({
+                role: h.role === "model" ? "assistant" : h.role,
+                content: h.parts ? h.parts[0].text : h.content
+            }));
         }
-        const chat = model.startChat({ history: validHistory });
-        const result = await chat.sendMessage(message);
-        return result.response.text();
-    } catch (error) {
-        console.error("Gemini Chat API Error details:", {
-            message: error.message,
-            stack: error.stack,
-            history: validHistory,
-            messageSent: message
+
+        messages.push({ role: "user", content: message });
+
+        const completion = await openai.chat.completions.create({
+            messages: messages,
+            model: "gpt-4o-mini",
         });
+        return completion.choices[0].message.content;
+    } catch (error) {
+        console.error("OpenAI Chat API Error details:", error.message);
         throw error;
     }
 };
@@ -112,10 +90,11 @@ const corsOptions = {
 app.use(cors(corsOptions));
 app.use(express.json());
 
-// MongoDB Connection
-mongoose.connect(process.env.MONGODB_URI)
-    .then(() => console.log('Connected to MongoDB Atlas'))
-    .catch(err => console.error('MongoDB connection error:', err));
+// PostgreSQL Connection is handled in config/database.js and synced above
+// But we can authenticate to check connection
+sequelize.authenticate()
+    .then(() => console.log('Connected to PostgreSQL via Sequelize'))
+    .catch(err => console.error('PostgreSQL connection error:', err));
 
 // ------------------------
 // Socket.io Real-time
@@ -159,12 +138,12 @@ app.post('/api/auth/register', async (req, res) => {
         }
 
         email = email.toLowerCase().trim();
-        const existingUser = await Student.findOne({ email });
+        const existingUser = await User.findOne({ where: { email } });
         if (existingUser) return res.status(400).json({ message: "User already exists" });
 
         const hashedPassword = await bcrypt.hash(password, 10);
 
-        const newUser = new Student({
+        const newUser = await User.create({
             name,
             email,
             password: hashedPassword,
@@ -173,10 +152,8 @@ app.post('/api/auth/register', async (req, res) => {
             targetJobs: (typeof targetJobs === 'string' && targetJobs.trim()) ? targetJobs.split(',').map(j => j.trim()) : []
         });
 
-        await newUser.save();
-
-        const token = jwt.sign({ id: newUser._id }, JWT_SECRET, { expiresIn: '7d' });
-        res.json({ token, user: { id: newUser._id, name: newUser.name, email: newUser.email } });
+        const token = jwt.sign({ id: newUser.id }, JWT_SECRET, { expiresIn: '7d' });
+        res.json({ token, user: { id: newUser.id, name: newUser.name, email: newUser.email } });
     } catch (err) {
         console.error("Registration Error:", err);
         res.status(500).json({ message: "Registration failed: " + err.message });
@@ -190,14 +167,14 @@ app.post('/api/auth/login', async (req, res) => {
 
         if (!email || !password) return res.status(400).json({ message: "Email and password are required" });
 
-        const user = await Student.findOne({ email });
+        const user = await User.findOne({ where: { email } });
         if (!user) return res.status(404).json({ message: "User not found" });
 
         const isMatch = await bcrypt.compare(password, user.password);
         if (!isMatch) return res.status(400).json({ message: "Invalid credentials" });
 
-        const token = jwt.sign({ id: user._id }, JWT_SECRET, { expiresIn: '7d' });
-        res.json({ token, user: { id: user._id, name: user.name, email: user.email } });
+        const token = jwt.sign({ id: user.id }, JWT_SECRET, { expiresIn: '7d' });
+        res.json({ token, user: { id: user.id, name: user.name, email: user.email } });
     } catch (err) {
         console.error("Login Error:", err);
         res.status(500).json({ message: "Login failed: " + err.message });
@@ -213,7 +190,7 @@ const auth = async (req, res, next) => {
         if (!token) throw new Error();
 
         const decoded = jwt.verify(token, JWT_SECRET);
-        const user = await Student.findById(decoded.id);
+        const user = await User.findByPk(decoded.id);
         if (!user) throw new Error();
 
         req.user = user;
@@ -253,7 +230,7 @@ ${eli5 ? "Explain things very simply." : ""}`;
 
         console.log("Mentor question:", question);
 
-        const answer = await getGeminiChatResponse(history || [], `${systemPrompt}\n\nUser Question: ${question}`);
+        const answer = await getOpenAIChatResponse(history || [], `${systemPrompt}\n\nUser Question: ${question}`);
         res.json({ answer });
     } catch (error) {
         console.error("Mentor Error:", error);
@@ -269,9 +246,9 @@ app.post('/api/ai/roadmap', async (req, res) => {
         const { year, track, days, goal } = req.body;
         const numDays = parseInt(days) || 30;
 
-        if (!process.env.GEMINI_API_KEY) {
-            console.error("CRITICAL: GEMINI_API_KEY is missing from environment.");
-            return res.status(500).json({ error: "Gemini API Key is not configured on the server." });
+        if (!process.env.OPENAI_API_KEY) {
+            console.error("CRITICAL: OPENAI_API_KEY is missing from environment.");
+            return res.status(500).json({ error: "OpenAI API Key is not configured on the server." });
         }
 
         const prompt = `
@@ -307,7 +284,7 @@ app.post('/api/ai/roadmap', async (req, res) => {
 
         console.log(`[Roadmap] Request received: Year=${year}, Track=${track}, Goal=${goal}`);
 
-        const responseText = await getGeminiResponse(prompt);
+        const responseText = await getOpenAIResponse(prompt);
         console.log("[Roadmap] Raw AI Response Length:", responseText.length);
 
         // Robust JSON extraction
@@ -364,12 +341,12 @@ app.post('/api/resume-analyze', upload.single('file'), async (req, res) => {
             return res.status(400).json({ error: "No resume file or text provided" });
         }
 
-        // Send to Gemini
+        // Send to OpenAI
         const prompt = `Analyze this resume for a B.Tech student targeting tech roles.
         Return JSON with score (0-100), improved_summary, feedback (HTML), and jobs_html (HTML).
         Resume: ${resumeText}`;
 
-        const responseText = await getGeminiResponse(prompt);
+        const responseText = await getOpenAIResponse(prompt);
 
         // Robust JSON extraction
         let jsonStr = responseText.trim();
@@ -401,7 +378,7 @@ app.post('/api/ai/resume', async (req, res) => {
 Return JSON with score (0-100), feedback (HTML), and jobs array.
 Resume: ${text}`;
 
-        const responseText = await getGeminiResponse(prompt);
+        const responseText = await getOpenAIResponse(prompt);
         const jsonMatch = responseText.match(/\{[\s\S]*\}/);
         const jsonStr = jsonMatch ? jsonMatch[0] : responseText;
 
@@ -417,7 +394,10 @@ Resume: ${text}`;
 // ------------------------
 app.get('/api/leaderboard', async (req, res) => {
     try {
-        const scores = await Leaderboard.find().sort({ score: -1, date: -1 }).limit(10);
+        const scores = await Leaderboard.findAll({
+            order: [['score', 'DESC'], ['date', 'DESC']],
+            limit: 10
+        });
         res.json(scores);
     } catch (err) {
         res.status(500).json({ error: "Failed to fetch leaderboard" });
@@ -427,8 +407,7 @@ app.get('/api/leaderboard', async (req, res) => {
 app.post('/api/leaderboard', async (req, res) => {
     try {
         const { name, score } = req.body;
-        const newEntry = new Leaderboard({ name, score });
-        await newEntry.save();
+        await Leaderboard.create({ name, score });
         res.json({ success: true });
     } catch (err) {
         res.status(500).json({ error: "Failed to save score" });

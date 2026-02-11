@@ -4,16 +4,18 @@ services:
     env: node
     region: singapore
     plan: free
-    buildCommand: cd server && npm install
-    startCommand: cd server && node index.js
+    buildCommand: cd server && npm install && pip install -r requirements.txt
+    startCommand: cd server && npm start
     envVars:
+      - key: PYTHON_VERSION
+        value: 3.10.0
       - key: NODE_ENV
         value: production
       - key: PORT
         value: 5000
-      - key: MONGODB_URI
+      - key: DATABASE_URL
         sync: false
-      - key: GEMINI_API_KEY
+      - key: OPENAI_API_KEY
         sync: false
       - key: JWT_SECRET
         sync: false
