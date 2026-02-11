@@ -320,32 +320,52 @@ app.post('/api/ai/roadmap', async (req, res) => {
 // ------------------------
 // Resume Analysis (Native Node.js)
 // ------------------------
+// ------------------------
+// Resume Analysis (Native Node.js)
+// ------------------------
 const multer = require('multer');
 const pdfParse = require('pdf-parse');
 const pdf = pdfParse.default || pdfParse;
 
 // Configure Multer (Memory Storage)
-const upload = multer({ storage: multer.memoryStorage() });
+const upload = multer({
+    storage: multer.memoryStorage(),
+    limits: { fileSize: 5 * 1024 * 1024 } // 5MB limit
+});
 
 app.post('/api/resume-analyze', upload.single('file'), async (req, res) => {
     try {
+        console.log("[Resume Analysis] Request received");
         let resumeText = "";
 
         if (req.file) {
-            // Parse PDF from buffer
-            const data = await pdf(req.file.buffer);
-            resumeText = data.text;
+            console.log("[Resume Analysis] Processing PDF file:", req.file.originalname);
+            try {
+                const data = await pdf(req.file.buffer);
+                resumeText = data.text;
+                console.log("[Resume Analysis] PDF extracted length:", resumeText.length);
+            } catch (pdfError) {
+                console.error("[Resume Analysis] PDF Parse Error:", pdfError);
+                return res.status(400).json({ error: "Failed to read PDF file. Ensure it is a valid PDF." });
+            }
         } else if (req.body.fallback_text) {
+            console.log("[Resume Analysis] Using fallback text");
             resumeText = req.body.fallback_text;
         } else {
+            console.warn("[Resume Analysis] No content provided");
             return res.status(400).json({ error: "No resume file or text provided" });
+        }
+
+        if (!resumeText.trim()) {
+            return res.status(400).json({ error: "Resume content is empty." });
         }
 
         // Send to OpenAI
         const prompt = `Analyze this resume for a B.Tech student targeting tech roles.
         Return JSON with score (0-100), improved_summary, feedback (HTML), and jobs_html (HTML).
-        Resume: ${resumeText}`;
+        Resume: ${resumeText.substring(0, 3000)}`; // Truncate to avoid token limits
 
+        console.log("[Resume Analysis] Sending to OpenAI...");
         const responseText = await getOpenAIResponse(prompt);
 
         // Robust JSON extraction
@@ -360,11 +380,12 @@ app.post('/api/resume-analyze', upload.single('file'), async (req, res) => {
         }
 
         const analysis = JSON.parse(jsonStr);
+        console.log("[Resume Analysis] Success. Score:", analysis.score);
         res.json(analysis);
 
     } catch (error) {
-        console.error("Resume Analysis Error:", error);
-        res.status(500).json({ error: "Resume analysis failed." });
+        console.error("[Resume Analysis] Critical Error:", error);
+        res.status(500).json({ error: "Resume analysis failed. Please try again." });
     }
 });
 

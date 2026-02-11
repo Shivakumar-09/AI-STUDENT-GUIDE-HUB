@@ -4,11 +4,9 @@ services:
     env: node
     region: singapore
     plan: free
-    buildCommand: cd server && npm install && pip install --upgrade pip && pip install -r requirements.txt
+    buildCommand: cd server && npm install
     startCommand: cd server && npm start
     envVars:
-      - key: PYTHON_VERSION
-        value: 3.10.0
       - key: NODE_ENV
         value: production
       - key: PORT
