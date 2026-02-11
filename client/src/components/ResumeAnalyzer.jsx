@@ -17,13 +17,13 @@ const ResumeAnalyzer = () => {
         }
 
         setLoading(true);
+        setAnalysis(null); // Clear previous analysis
         const formData = new FormData();
         file
             ? formData.append("file", file)
             : formData.append("fallback_text", text);
 
         try {
-            // Updated port to 5000 based on standard setup, or keep 8000 if python backend is used
             const res = await axios.post(
                 `${API_URL}/api/resume-analyze`,
                 formData,
@@ -32,7 +32,8 @@ const ResumeAnalyzer = () => {
             setAnalysis(res.data);
         } catch (err) {
             console.error("Resume Analysis Error:", err);
-            alert("Analysis failed. Please try again.");
+            const errorMsg = err.response?.data?.error || "Analysis failed. Please try again.";
+            alert(errorMsg);
         } finally {
             setLoading(false);
         }
@@ -83,7 +84,9 @@ const ResumeAnalyzer = () => {
                             </label>
 
                             <div style={styles.divider}>
+                                <div style={{ flex: 1, height: '1px', background: '#e2e8f0' }} />
                                 <span style={styles.dividerText}>OR PASTE TEXT</span>
+                                <div style={{ flex: 1, height: '1px', background: '#e2e8f0' }} />
                             </div>
 
                             <textarea
@@ -255,58 +258,89 @@ const ResumeAnalyzer = () => {
             <style>{`
                 @keyframes spin { 100% { transform: rotate(360deg); } }
                 .spin { animation: spin 1s linear infinite; }
-                .html-content ul { padding-left: 20px; margin: 10px 0; }
-                .html-content li { margin-bottom: 8px; color: #334155; }
-                .html-content strong { color: #1e293b; font-weight: 700; }
                 
+                .html-content {
+                    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+                }
+                .html-content ul { 
+                    padding-left: 0; 
+                    margin: 20px 0; 
+                    list-style: none;
+                }
+                .html-content li { 
+                    margin-bottom: 16px; 
+                    padding: 16px;
+                    border-radius: 16px;
+                    background: rgba(255, 255, 255, 0.4);
+                    border: 1px solid rgba(255, 255, 255, 0.5);
+                    color: #334155; 
+                    line-height: 1.6;
+                    transition: transform 0.2s ease;
+                }
+                .html-content li:hover {
+                    transform: translateX(4px);
+                    background: rgba(255, 255, 255, 0.6);
+                }
+                .html-content strong { 
+                    color: #0f172a; 
+                    font-weight: 700;
+                    display: block;
+                    margin-bottom: 4px;
+                    font-size: 1.05rem;
+                }
+                
+                /* Highlighting Critical issues */
+                .html-content li:has(strong:contains('Critical')),
+                .html-content li:contains('Critical'),
+                .html-content li:contains('Rectify') {
+                    border-left: 4px solid #ef4444;
+                    background: rgba(254, 242, 242, 0.5);
+                }
+
                 /* Job Cards Internal Styling */
                 .job-grid { 
                     display: grid; 
-                    gap: 20px; 
-                    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); 
+                    gap: 16px; 
+                    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); 
                     margin-top: 16px;
                 }
                 .job-card { 
-                    background: rgba(255, 255, 255, 0.15); 
+                    background: rgba(255, 255, 255, 0.6); 
                     backdrop-filter: blur(12px);
-                    -webkit-backdrop-filter: blur(12px);
-                    border: 1px solid rgba(255, 255, 255, 0.3); 
+                    border: 1px solid rgba(255, 255, 255, 0.8); 
                     padding: 20px; 
                     border-radius: 20px;
                     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-                    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
                     position: relative;
-                    overflow: hidden;
-                }
-                .job-card::before {
-                    content: '';
-                    position: absolute;
-                    top: 0; left: 0; right: 0; height: 100%;
-                    background: linear-gradient(180deg, rgba(255,255,255,0.3) 0%, rgba(255,255,255,0) 100%);
-                    pointer-events: none;
-                    opacity: 0.5;
                 }
                 .job-card:hover { 
-                    background: rgba(255, 255, 255, 0.25); 
-                    transform: translateY(-5px); 
-                    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 0 0 1px rgba(255,255,255,0.5); 
+                    transform: translateY(-4px); 
+                    background: white;
+                    box-shadow: 0 12px 24px rgba(0,0,0,0.06);
+                    border-color: #4f46e5;
                 }
-                .job-title { 
-                    font-size: 1.1rem;
+                .job-card-title { 
                     font-weight: 800; 
-                    color: #0f172a; 
-                    margin-bottom: 8px;
-                    line-height: 1.3;
-                    position: relative;
+                    color: #1e293b; 
+                    margin-bottom: 6px;
+                    font-size: 1.1rem;
                 }
-                .job-company { 
-                    font-size: 0.9rem; 
-                    color: #475569; 
+                .job-card-meta {
+                    font-size: 0.85rem;
+                    color: #6366f1;
                     font-weight: 600;
-                    display: flex;
-                    align-items: center;
-                    gap: 6px;
-                    position: relative;
+                    text-transform: uppercase;
+                    letter-spacing: 0.025em;
+                }
+                .job-card-badge {
+                    display: inline-block;
+                    margin-top: 12px;
+                    padding: 4px 10px;
+                    background: #f1f5f9;
+                    border-radius: 8px;
+                    font-size: 0.75rem;
+                    font-weight: 600;
+                    color: #475569;
                 }
             `}</style>
         </div>
@@ -316,51 +350,57 @@ const ResumeAnalyzer = () => {
 const styles = {
     page: {
         minHeight: "100vh",
-        padding: "40px 24px",
+        padding: "60px 24px",
         position: "relative",
-        fontFamily: "'Inter', sans-serif",
+        fontFamily: "'Outfit', 'Inter', sans-serif",
         color: "#1e293b",
-        overflow: "hidden"
+        background: "#f8fafc"
     },
     backgroundBlur: {
         position: "fixed",
         top: 0, left: 0, right: 0, bottom: 0,
-        background: "radial-gradient(circle at 10% 20%, rgba(99, 102, 241, 0.1) 0%, transparent 40%), radial-gradient(circle at 90% 80%, rgba(14, 165, 233, 0.1) 0%, transparent 40%)",
+        background: `
+            radial-gradient(circle at 0% 0%, rgba(99, 102, 241, 0.15) 0%, transparent 50%),
+            radial-gradient(circle at 100% 0%, rgba(6, 182, 212, 0.15) 0%, transparent 50%),
+            radial-gradient(circle at 50% 100%, rgba(168, 85, 247, 0.1) 0%, transparent 50%)
+        `,
         zIndex: -1,
     },
     container: {
-        maxWidth: "1200px",
+        maxWidth: "1300px",
         margin: "0 auto",
         position: "relative",
         zIndex: 1
     },
     header: {
         textAlign: "center",
-        marginBottom: "48px"
+        marginBottom: "64px"
     },
     title: {
-        fontSize: "2.5rem",
+        fontSize: "3.5rem",
         fontWeight: "900",
-        marginBottom: "12px",
-        letterSpacing: "-0.03em",
-        color: "#0f172a"
+        marginBottom: "16px",
+        letterSpacing: "-0.04em",
+        color: "#0f172a",
+        lineHeight: 1
     },
     titleGradient: {
-        background: "linear-gradient(135deg, #4f46e5, #06b6d4)",
+        background: "linear-gradient(135deg, #4f46e5 0%, #06b6d4 100%)",
         WebkitBackgroundClip: "text",
         WebkitTextFillColor: "transparent",
     },
     subtitle: {
-        fontSize: "1.1rem",
+        fontSize: "1.25rem",
         color: "#64748b",
         maxWidth: "600px",
         margin: "0 auto",
-        lineHeight: 1.6
+        lineHeight: 1.6,
+        fontWeight: "500"
     },
     grid: {
         display: "grid",
-        gridTemplateColumns: "1fr 1.5fr",
-        gap: "32px",
+        gridTemplateColumns: "400px 1fr",
+        gap: "40px",
         alignItems: "start",
     },
     leftCol: {
@@ -368,261 +408,274 @@ const styles = {
         flexDirection: "column",
         gap: "24px",
         position: "sticky",
-        top: "24px"
+        top: "40px"
     },
     rightCol: {
-        minHeight: "500px"
+        minHeight: "600px"
     },
     glassCard: {
-        background: "rgba(255, 255, 255, 0.7)",
-        backdropFilter: "blur(20px)",
-        WebkitBackdropFilter: "blur(20px)",
-        border: "1px solid rgba(255, 255, 255, 0.5)",
-        borderRadius: "24px",
+        background: "rgba(255, 255, 255, 0.8)",
+        backdropFilter: "blur(24px)",
+        WebkitBackdropFilter: "blur(24px)",
+        border: "1px solid rgba(255, 255, 255, 0.7)",
+        borderRadius: "32px",
         padding: "32px",
-        boxShadow: "0 8px 32px rgba(0, 0, 0, 0.04)",
+        boxShadow: "0 20px 50px rgba(0, 0, 0, 0.05)",
         display: "flex",
         flexDirection: "column",
-        gap: "20px"
+        gap: "24px"
     },
     uploadArea: {
-        border: "2px dashed #e0e7ff",
-        borderRadius: "16px",
-        padding: "40px 20px",
+        border: "2px dashed #e2e8f0",
+        borderRadius: "24px",
+        padding: "48px 24px",
         textAlign: "center",
         cursor: "pointer",
-        transition: "all 0.2s ease",
-        background: "rgba(255,255,255,0.5)",
+        transition: "all 0.3s ease",
+        background: "rgba(248, 250, 252, 0.5)",
+        display: "block"
     },
     uploadIconWrap: {
-        width: "64px",
-        height: "64px",
-        background: "#e0e7ff",
-        borderRadius: "20px",
+        width: "72px",
+        height: "72px",
+        background: "white",
+        borderRadius: "24px",
         display: "grid",
         placeItems: "center",
-        margin: "0 auto 16px"
+        margin: "0 auto 20px",
+        boxShadow: "0 10px 20px rgba(0,0,0,0.05)",
+        color: "#4f46e5"
     },
     uploadTitle: {
-        fontSize: "1rem",
-        fontWeight: "700",
+        fontSize: "1.1rem",
+        fontWeight: "800",
         color: "#1e293b",
-        marginBottom: "4px"
+        marginBottom: "6px"
     },
     uploadSubtitle: {
-        fontSize: "0.85rem",
-        color: "#64748b"
+        fontSize: "0.9rem",
+        color: "#64748b",
+        fontWeight: "500"
     },
     divider: {
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
-        margin: "8px 0"
+        gap: "12px"
     },
     dividerText: {
-        fontSize: "0.75rem",
-        fontWeight: "800",
+        fontSize: "0.7rem",
+        fontWeight: "900",
         color: "#94a3b8",
-        background: "#f8fafc", // fallback
-        padding: "4px 12px",
-        borderRadius: "99px",
-        letterSpacing: "0.05em"
+        textTransform: "uppercase",
+        letterSpacing: "0.1em"
     },
     textarea: {
         width: "100%",
-        padding: "16px",
-        borderRadius: "16px",
-        border: "1px solid rgba(0,0,0,0.1)",
-        background: "rgba(255,255,255,0.5)",
+        padding: "20px",
+        borderRadius: "20px",
+        border: "1px solid #e2e8f0",
+        background: "white",
         resize: "none",
-        fontSize: "0.9rem",
+        fontSize: "0.95rem",
         fontFamily: "inherit",
         outline: "none",
-        transition: "0.2s"
+        transition: "all 0.2s ease",
+        color: "#334155"
     },
     button: {
         width: "100%",
-        padding: "16px",
-        borderRadius: "16px",
-        background: "linear-gradient(135deg, #4f46e5, #06b6d4)",
+        padding: "18px",
+        borderRadius: "20px",
+        background: "linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%)",
         border: "none",
         color: "white",
-        fontSize: "1rem",
-        fontWeight: "700",
+        fontSize: "1.1rem",
+        fontWeight: "800",
         cursor: "pointer",
-        boxShadow: "0 10px 20px rgba(79, 70, 229, 0.3)",
-        position: "relative",
-        overflow: "hidden"
+        boxShadow: "0 10px 25px rgba(79, 70, 229, 0.4)",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        gap: "10px"
     },
     btnContent: {
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
-        gap: "8px"
+        gap: "10px"
     },
     tipHeader: {
         display: "flex",
         alignItems: "center",
-        gap: "8px",
-        marginBottom: "8px"
+        gap: "10px",
+        marginBottom: "12px"
     },
     tipTitle: {
         fontSize: "0.85rem",
-        fontWeight: "800",
-        color: "#ca8a04",
-        textTransform: "uppercase"
+        fontWeight: "900",
+        color: "#854d0e",
+        textTransform: "uppercase",
+        letterSpacing: "0.05em"
     },
     tipText: {
-        fontSize: "0.9rem",
-        color: "#854d0e",
-        lineHeight: "1.5"
+        fontSize: "0.95rem",
+        color: "#92400e",
+        lineHeight: "1.6",
+        fontWeight: "500"
     },
     resultsContainer: {
         display: "flex",
         flexDirection: "column",
-        gap: "24px"
+        gap: "32px"
     },
     scoreCard: {
-        background: "linear-gradient(135deg, #1e1b4b, #312e81)",
-        borderRadius: "24px",
-        padding: "32px",
-        color: "white",
+        background: "white",
+        borderRadius: "32px",
+        padding: "40px",
         display: "flex",
         alignItems: "center",
-        gap: "32px",
-        boxShadow: "0 20px 40px rgba(30, 27, 75, 0.4)",
-        border: "1px solid rgba(255,255,255,0.1)"
+        gap: "40px",
+        boxShadow: "0 20px 40px rgba(0, 0, 0, 0.03)",
+        border: "1px solid rgba(255,255,255,0.8)",
+        position: "relative",
+        overflow: "hidden"
     },
     scoreRing: {
         position: "relative",
-        width: "120px",
-        height: "120px"
+        width: "140px",
+        height: "140px"
     },
     scoreValue: {
         position: "absolute",
         top: "50%",
         left: "50%",
         transform: "translate(-50%, -50%)",
-        fontSize: "2.5rem",
-        fontWeight: "800",
+        fontSize: "3rem",
+        fontWeight: "900",
         display: "flex",
         flexDirection: "column",
         alignItems: "center",
-        lineHeight: 1
+        lineHeight: 1,
+        color: "#1e293b"
     },
     scoreLabel: {
-        fontSize: "0.85rem",
-        opacity: 0.7,
-        fontWeight: "600",
+        fontSize: "0.9rem",
+        opacity: 0.5,
+        fontWeight: "700",
         marginTop: "4px"
     },
     scoreMeta: {
         flex: 1
     },
     scoreTitle: {
-        fontSize: "1.5rem",
-        fontWeight: "800",
-        marginBottom: "8px"
+        fontSize: "1.75rem",
+        fontWeight: "900",
+        marginBottom: "12px",
+        color: "#0f172a"
     },
     scoreDesc: {
-        fontSize: "1rem",
-        opacity: 0.9,
-        lineHeight: 1.5,
-        maxWidth: "300px"
+        fontSize: "1.1rem",
+        color: "#64748b",
+        lineHeight: 1.6,
+        fontWeight: "500"
     },
     metricsGrid: {
         display: "grid",
         gridTemplateColumns: "1fr 1fr",
-        gap: "16px"
+        gap: "20px"
     },
     metricCard: {
         background: "white",
-        borderRadius: "16px",
-        padding: "16px 20px",
+        borderRadius: "24px",
+        padding: "24px",
         display: "flex",
         alignItems: "center",
-        gap: "16px",
-        border: "1px solid rgba(0,0,0,0.05)",
-        boxShadow: "0 4px 10px rgba(0,0,0,0.02)"
+        gap: "20px",
+        border: "1px solid rgba(0,0,0,0.03)",
+        boxShadow: "0 10px 20px rgba(0,0,0,0.02)"
     },
     metricLabel: {
-        fontSize: "0.75rem",
-        fontWeight: "700",
+        fontSize: "0.8rem",
+        fontWeight: "800",
         color: "#94a3b8",
-        textTransform: "uppercase"
+        textTransform: "uppercase",
+        letterSpacing: "0.05em",
+        marginBottom: "4px"
     },
     metricValue: {
-        fontSize: "1rem",
-        fontWeight: "800",
+        fontSize: "1.25rem",
+        fontWeight: "900",
         color: "#1e293b"
     },
     cardHeader: {
         display: "flex",
         justifyContent: "space-between",
         alignItems: "center",
-        marginBottom: "16px"
+        marginBottom: "20px"
     },
     cardTitle: {
-        fontSize: "1.1rem",
-        fontWeight: "800",
-        color: "#0f172a"
+        fontSize: "1.25rem",
+        fontWeight: "900",
+        color: "#0f172a",
+        letterSpacing: "-0.02em"
     },
     iconBtn: {
-        background: "transparent",
+        background: "#f1f5f9",
         border: "none",
         cursor: "pointer",
-        color: "#6366f1",
-        padding: "8px",
-        borderRadius: "8px",
+        color: "#4f46e5",
+        padding: "10px",
+        borderRadius: "12px",
         display: "grid",
         placeItems: "center",
-        transition: "0.2s"
+        transition: "all 0.2s ease"
     },
     summaryText: {
-        fontSize: "1rem",
-        lineHeight: "1.7",
-        color: "#334155"
+        fontSize: "1.1rem",
+        lineHeight: "1.8",
+        color: "#334155",
+        fontWeight: "500"
     },
     htmlContent: {
-        fontSize: "0.95rem",
-        lineHeight: "1.6",
-        color: "#334155"
+        fontSize: "1rem"
     },
     placeholderCard: {
-        background: "rgba(255,255,255,0.4)",
-        border: "2px dashed rgba(0,0,0,0.05)",
-        borderRadius: "24px",
-        padding: "64px 32px",
+        background: "white",
+        border: "2px dashed #e2e8f0",
+        borderRadius: "40px",
+        padding: "80px 40px",
         textAlign: "center",
-        backdropFilter: "blur(10px)",
         display: "flex",
         flexDirection: "column",
         alignItems: "center",
         justifyContent: "center",
-        minHeight: "400px"
+        minHeight: "500px"
     },
     placeholderIcon: {
-        width: "80px",
-        height: "80px",
-        background: "white",
-        borderRadius: "50%",
+        width: "96px",
+        height: "96px",
+        background: "#f8fafc",
+        borderRadius: "32px",
         display: "grid",
         placeItems: "center",
-        marginBottom: "24px",
-        boxShadow: "0 10px 30px rgba(0,0,0,0.05)"
+        marginBottom: "32px",
+        color: "#cbd5e1"
     },
     placeholderTitle: {
-        fontSize: "1.5rem",
-        fontWeight: "800",
-        color: "#94a3b8",
-        marginBottom: "12px"
+        fontSize: "1.75rem",
+        fontWeight: "900",
+        color: "#334155",
+        marginBottom: "16px"
     },
     placeholderText: {
-        color: "#94a3b8",
-        maxWidth: "300px",
-        lineHeight: 1.5
+        fontSize: "1.1rem",
+        color: "#64748b",
+        maxWidth: "340px",
+        lineHeight: 1.6,
+        fontWeight: "500"
     },
-    "@media (max-width: 900px)": {
+    "@media (max-width: 1100px)": {
         grid: {
             gridTemplateColumns: "1fr"
         },

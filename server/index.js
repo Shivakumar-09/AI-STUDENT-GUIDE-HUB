@@ -8,65 +8,16 @@ const http = require('http');
 const { Server } = require('socket.io');
 const path = require('path');
 
-const { OpenAI } = require("openai");
-
-const { sequelize, User, QuizScore, Leaderboard } = require('./models');
-
-// Sync Database
-sequelize.sync({ alter: true }) // 'alter' updates tables if they exist
-    .then(() => console.log('PostgreSQL Database Synced'))
-    .catch(err => console.error('Database sync error:', err));
+const { getGeminiResponse, getGeminiChatResponse } = require('./utils/gemini');
+const { sequelize, User, Leaderboard } = require('./models');
 
 // ------------------------
 // GEMINI AI CONFIG
 // ------------------------
-// ------------------------
-// OPENAI CONFIG
-// ------------------------
-const openai = new OpenAI({
-    apiKey: process.env.OPENAI_API_KEY,
-});
+// (OpenAI config removed as we are migrating to Gemini)
 
-const getOpenAIResponse = async (prompt) => {
-    try {
-        const completion = await openai.chat.completions.create({
-            messages: [{ role: "user", content: prompt }],
-            model: "gpt-4o-mini",
-        });
-        return completion.choices[0].message.content;
-    } catch (error) {
-        console.error("OpenAI API Error details:", error.message);
-        throw error;
-    }
-};
+// OpenAI chat helper removed
 
-const getOpenAIChatResponse = async (history, message) => {
-    try {
-        // Convert Gemini-style history to OpenAI format if needed, 
-        // but for now we'll just append the new message to a clean slate or basic history.
-        // If history comes in as [{role, parts}], we need to map it.
-        // OpenAI expects: [{role: "user"|"assistant"|"system", content: "..."}]
-
-        let messages = [];
-        if (Array.isArray(history)) {
-            messages = history.map(h => ({
-                role: h.role === "model" ? "assistant" : h.role,
-                content: h.parts ? h.parts[0].text : h.content
-            }));
-        }
-
-        messages.push({ role: "user", content: message });
-
-        const completion = await openai.chat.completions.create({
-            messages: messages,
-            model: "gpt-4o-mini",
-        });
-        return completion.choices[0].message.content;
-    } catch (error) {
-        console.error("OpenAI Chat API Error details:", error.message);
-        throw error;
-    }
-};
 
 const app = express();
 const server = http.createServer(app);
@@ -230,7 +181,7 @@ ${eli5 ? "Explain things very simply." : ""}`;
 
         console.log("Mentor question:", question);
 
-        const answer = await getOpenAIChatResponse(history || [], `${systemPrompt}\n\nUser Question: ${question}`);
+        const answer = await getGeminiChatResponse(history || [], `${systemPrompt}\n\nUser Question: ${question}`);
         res.json({ answer });
     } catch (error) {
         console.error("Mentor Error:", error);
@@ -246,9 +197,9 @@ app.post('/api/ai/roadmap', async (req, res) => {
         const { year, track, days, goal } = req.body;
         const numDays = parseInt(days) || 30;
 
-        if (!process.env.OPENAI_API_KEY) {
-            console.error("CRITICAL: OPENAI_API_KEY is missing from environment.");
-            return res.status(500).json({ error: "OpenAI API Key is not configured on the server." });
+        if (!process.env.GEMINI_API_KEY) {
+            console.error("CRITICAL: GEMINI_API_KEY is missing from environment.");
+            return res.status(500).json({ error: "Gemini API Key is not configured on the server." });
         }
 
         const prompt = `
@@ -284,7 +235,7 @@ app.post('/api/ai/roadmap', async (req, res) => {
 
         console.log(`[Roadmap] Request received: Year=${year}, Track=${track}, Goal=${goal}`);
 
-        const responseText = await getOpenAIResponse(prompt);
+        const responseText = await getGeminiResponse(prompt);
         console.log("[Roadmap] Raw AI Response Length:", responseText.length);
 
         // Robust JSON extraction
@@ -325,7 +276,7 @@ app.post('/api/ai/roadmap', async (req, res) => {
 // ------------------------
 const multer = require('multer');
 const pdfParse = require('pdf-parse');
-const pdf = pdfParse.default || pdfParse;
+const pdf = pdfParse;
 
 // Configure Multer (Memory Storage)
 const upload = multer({
@@ -336,37 +287,56 @@ const upload = multer({
 app.post('/api/resume-analyze', upload.single('file'), async (req, res) => {
     try {
         console.log("[Resume Analysis] Request received");
+
+        if (!process.env.GEMINI_API_KEY) {
+            console.error("[Resume Analysis] Error: GEMINI_API_KEY is missing.");
+            return res.status(500).json({ error: "Server configuration error: Gemini API key is missing." });
+        }
+
         let resumeText = "";
 
         if (req.file) {
             console.log("[Resume Analysis] Processing PDF file:", req.file.originalname);
             try {
+                // Ensure proper extraction from buffer
                 const data = await pdf(req.file.buffer);
                 resumeText = data.text;
                 console.log("[Resume Analysis] PDF extracted length:", resumeText.length);
             } catch (pdfError) {
                 console.error("[Resume Analysis] PDF Parse Error:", pdfError);
-                return res.status(400).json({ error: "Failed to read PDF file. Ensure it is a valid PDF." });
+                return res.status(400).json({ error: "Failed to read PDF file. Ensure it is a valid, non-encrypted PDF." });
             }
         } else if (req.body.fallback_text) {
             console.log("[Resume Analysis] Using fallback text");
             resumeText = req.body.fallback_text;
         } else {
             console.warn("[Resume Analysis] No content provided");
-            return res.status(400).json({ error: "No resume file or text provided" });
+            return res.status(400).json({ error: "No resume file or text provided. Please upload a PDF or paste resume text." });
         }
 
         if (!resumeText.trim()) {
-            return res.status(400).json({ error: "Resume content is empty." });
+            return res.status(400).json({ error: "Resume content is empty. Please check your file." });
         }
 
-        // Send to OpenAI
-        const prompt = `Analyze this resume for a B.Tech student targeting tech roles.
-        Return JSON with score (0-100), improved_summary, feedback (HTML), and jobs_html (HTML).
-        Resume: ${resumeText.substring(0, 3000)}`; // Truncate to avoid token limits
+        // Send to Gemini
+        const prompt = `
+            Analyze this resume for a B.Tech student targeting tech roles.
+            Focus on matching standards for companies like Google, Amazon, Microsoft, and Meta.
+            
+            Return ONLY a valid JSON object with the following structure:
+            {
+                "score": 0-100 (integer),
+                "improved_summary": "A 3-4 line professional summary highlighting strengths",
+                "feedback": "HTML formatted list of improvements (use <ul> and <li>)",
+                "jobs_html": "HTML formatted suggested job roles and target sectors"
+            }
 
-        console.log("[Resume Analysis] Sending to OpenAI...");
-        const responseText = await getOpenAIResponse(prompt);
+            Resume Content:
+            ${resumeText.substring(0, 4000)}
+        `;
+
+        console.log("[Resume Analysis] Sending to AI...");
+        const responseText = await getGeminiResponse(prompt);
 
         // Robust JSON extraction
         let jsonStr = responseText.trim();
@@ -379,13 +349,21 @@ app.post('/api/resume-analyze', upload.single('file'), async (req, res) => {
             jsonStr = jsonStr.substring(firstBrace, lastBrace + 1);
         }
 
-        const analysis = JSON.parse(jsonStr);
-        console.log("[Resume Analysis] Success. Score:", analysis.score);
-        res.json(analysis);
+        try {
+            const analysis = JSON.parse(jsonStr);
+            console.log("[Resume Analysis] Success. Score:", analysis.score);
+            res.json(analysis);
+        } catch (parseError) {
+            console.error("[Resume Analysis] JSON Parsing Error. Raw AI response:", responseText);
+            res.status(500).json({ error: "AI returned an invalid response format. Please try again." });
+        }
 
     } catch (error) {
         console.error("[Resume Analysis] Critical Error:", error);
-        res.status(500).json({ error: "Resume analysis failed. Please try again." });
+        res.status(500).json({
+            error: "Resume analysis failed due to a server error. Please try again later.",
+            details: error.message
+        });
     }
 });
 
@@ -399,7 +377,7 @@ app.post('/api/ai/resume', async (req, res) => {
 Return JSON with score (0-100), feedback (HTML), and jobs array.
 Resume: ${text}`;
 
-        const responseText = await getOpenAIResponse(prompt);
+        const responseText = await getGeminiResponse(prompt);
         const jsonMatch = responseText.match(/\{[\s\S]*\}/);
         const jsonStr = jsonMatch ? jsonMatch[0] : responseText;
 
