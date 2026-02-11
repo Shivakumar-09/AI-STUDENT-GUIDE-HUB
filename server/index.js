@@ -39,6 +39,14 @@ const corsOptions = {
     allowedHeaders: ['Content-Type', 'Authorization']
 };
 app.use(cors(corsOptions));
+app.get('/', (req, res) => {
+    res.json({
+        message: "Welcome to AI Student Guide Hub API",
+        status: "Running",
+        documentation: "/api/health"
+    });
+});
+
 app.use(express.json());
 
 // PostgreSQL Connection is handled in config/database.js and synced above
@@ -359,10 +367,11 @@ app.post('/api/resume-analyze', upload.single('file'), async (req, res) => {
         }
 
     } catch (error) {
-        console.error("[Resume Analysis] Critical Error:", error);
-        res.status(500).json({
-            error: "Resume analysis failed due to a server error. Please try again later.",
-            details: error.message
+        console.error("[Resume Analysis] Critical Error:", error.message);
+        const statusCode = error.statusCode || 500;
+        res.status(statusCode).json({
+            error: error.message || "Resume analysis failed due to a server error.",
+            details: process.env.NODE_ENV === 'development' ? error.stack : undefined
         });
     }
 });

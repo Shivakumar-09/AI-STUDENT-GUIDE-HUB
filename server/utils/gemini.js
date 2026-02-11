@@ -16,10 +16,23 @@ const getGeminiResponse = async (prompt) => {
         return result.response.text();
     } catch (error) {
         console.error("Gemini API Error:", error.message);
-        if (error.message.includes("429")) {
-            throw new Error("AI service is currently busy (Rate Limit). Please wait a few seconds.");
+
+        // Categorize errors for the caller
+        if (error.message.includes("429") || error.message.includes("quota")) {
+            const err = new Error("AI service is currently busy (Quota Exceeded). Please wait 60 seconds.");
+            err.statusCode = 429;
+            throw err;
         }
-        throw error;
+
+        if (error.message.includes("404") || error.message.includes("not found")) {
+            const err = new Error("AI model configuration error. Please contact support.");
+            err.statusCode = 404;
+            throw err;
+        }
+
+        const err = new Error(error.message || "Failed to get AI response.");
+        err.statusCode = 500;
+        throw err;
     }
 };
 

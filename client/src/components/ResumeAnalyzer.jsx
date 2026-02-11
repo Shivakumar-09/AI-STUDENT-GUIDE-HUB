@@ -32,8 +32,12 @@ const ResumeAnalyzer = () => {
             setAnalysis(res.data);
         } catch (err) {
             console.error("Resume Analysis Error:", err);
-            const errorMsg = err.response?.data?.error || "Analysis failed. Please try again.";
-            alert(errorMsg);
+            if (err.response?.status === 429) {
+                alert("🚀 AI service is busy due to high demand. Please wait 60 seconds and try again.");
+            } else {
+                const errorMsg = err.response?.data?.error || "Analysis failed. Please try again.";
+                alert(errorMsg);
+            }
         } finally {
             setLoading(false);
         }
