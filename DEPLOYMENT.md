@@ -28,7 +28,12 @@ We will use **Render** to host the backend (Node.js + Python + PostgreSQL).
         - `JWT_SECRET`: (Your Secret Key)
         - `NODE_ENV`: `production`
         - `PYTHON_VERSION`: `3.10.0`
-6.  **Deploy**: Click **Create Web Service**. 
+6.  **Settings (Manual Config)**:
+    - If Render fails to detect `render.yaml`, go to **Settings**:
+    - **Root Directory**: Set to `server`.
+    - **Build Command**: `npm install && pip install --upgrade pip && pip install -r requirements.txt`
+    - **Start Command**: `npm start`
+7.  **Deploy**: Click **Create Web Service**. 
     - Render will install Node dependencies, Python dependencies, and start the server.
 
 ---

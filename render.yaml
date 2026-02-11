@@ -4,7 +4,7 @@ services:
     env: node
     region: singapore
     plan: free
-    buildCommand: cd server && npm install && pip install -r requirements.txt
+    buildCommand: cd server && npm install && pip install --upgrade pip && pip install -r requirements.txt
     startCommand: cd server && npm start
     envVars:
       - key: PYTHON_VERSION
