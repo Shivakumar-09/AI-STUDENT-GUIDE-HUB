@@ -102,15 +102,16 @@ const Quiz = () => {
                     </p>
                 </motion.div>
 
-                <div style={styles.grid}>
+                <div id="quiz-grid" style={styles.grid}>
                     {/* LEFT: QUIZ */}
                     <motion.div
                         initial={{ opacity: 0, x: -20 }}
                         animate={{ opacity: 1, x: 0 }}
                         transition={{ delay: 0.1 }}
+                        id="quiz-main-card"
                         style={styles.glassCard}
                     >
-                        <div style={styles.quizHeader}>
+                        <div id="quiz-header-controls" style={styles.quizHeader}>
                             <div style={styles.inputGroup}>
                                 <label style={styles.label}>Candidate Name</label>
                                 <input
@@ -150,7 +151,7 @@ const Quiz = () => {
                                         <span style={styles.qIndex}>{qi + 1}</span>
                                         {q.q}
                                     </div>
-                                    <div style={styles.optionGrid}>
+                                    <div className="quiz-option-grid" style={styles.optionGrid}>
                                         {q.options.map((op, oi) => (
                                             <button
                                                 key={oi}
@@ -209,6 +210,7 @@ const Quiz = () => {
                         initial={{ opacity: 0, x: 20 }}
                         animate={{ opacity: 1, x: 0 }}
                         transition={{ delay: 0.2 }}
+                        id="quiz-leaderboard"
                         style={styles.glassCard}
                     >
                         <div style={styles.lbHeader}>
@@ -249,6 +251,29 @@ const Quiz = () => {
 
             <style>{`
                 ::placeholder { color: #94a3b8; }
+                
+                @media (max-width: 1024px) {
+                    #quiz-grid {
+                        grid-template-columns: 1fr !important;
+                    }
+                }
+                
+                @media (max-width: 768px) {
+                    #quiz-header-controls {
+                        flex-direction: column !important;
+                        align-items: stretch !important;
+                        gap: 20px !important;
+                    }
+                    .quiz-option-grid {
+                        grid-template-columns: 1fr !important;
+                    }
+                    #quiz-main-card {
+                        padding: 24px !important;
+                    }
+                    #quiz-leaderboard {
+                        padding: 24px !important;
+                    }
+                }
             `}</style>
         </div>
     );

@@ -107,8 +107,14 @@ const AppShell = ({ children, onLogout }) => {
             </main>
 
             {/* MOBILE BOTTOM NAV */}
-            <div className="mobile-nav" style={styles.mobileBottomNav}>
-                {navItems.slice(0, 5).map((item) => {
+            <div className="mobile-nav no-scrollbar" style={{
+                ...styles.mobileBottomNav,
+                overflowX: 'auto',
+                justifyContent: 'flex-start',
+                padding: '0 16px',
+                gap: '12px'
+            }}>
+                {navItems.map((item) => {
                     const active = isActive(item.path);
                     const Icon = item.icon;
                     return (
@@ -118,6 +124,8 @@ const AppShell = ({ children, onLogout }) => {
                             style={{
                                 ...styles.mobileNavItem,
                                 color: active ? "#6366f1" : "#94a3b8",
+                                minWidth: '64px',
+                                flexShrink: 0
                             }}
                         >
                             <Icon size={20} strokeWidth={active ? 2.5 : 2} />

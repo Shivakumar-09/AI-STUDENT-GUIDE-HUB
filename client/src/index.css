@@ -63,14 +63,16 @@
   -webkit-touch-callout: none;
 }
 
-html, body {
+html,
+body {
   /* Prevent scrolling artifacts and selection */
   overscroll-behavior-y: none;
   user-select: none;
   height: 100%;
 }
 
-input, textarea {
+input,
+textarea {
   /* Re-enable selection for inputs */
   user-select: text !important;
 }
@@ -82,7 +84,7 @@ body {
   overflow-x: hidden;
   -webkit-font-smoothing: antialiased;
   line-height: 1.5;
-  
+
   /* Safe Area Support */
   padding-top: env(safe-area-inset-top);
   padding-bottom: env(safe-area-inset-bottom);
@@ -115,4 +117,36 @@ h3,
 
 ::-webkit-scrollbar-thumb:hover {
   background: var(--text-dim);
+}
+
+/* Mobile Utilities */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+.no-scrollbar {
+  -ms-overflow-style: none;
+  /* IE and Edge */
+  scrollbar-width: none;
+  /* Firefox */
+}
+
+@media (max-width: 768px) {
+  .mobile-stack {
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    gap: 16px !important;
+  }
+
+  .mobile-hide {
+    display: none !important;
+  }
+
+  .text-center-mobile {
+    text-align: center !important;
+  }
+
+  .w-full-mobile {
+    width: 100% !important;
+  }
 }

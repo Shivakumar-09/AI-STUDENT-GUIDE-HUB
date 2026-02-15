@@ -74,13 +74,13 @@ const Opportunities = () => {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 className="card"
-                style={{ padding: '32px', background: 'linear-gradient(135deg, rgba(37, 99, 235, 0.05), transparent)' }}
+                style={{ padding: '24px 32px', background: 'linear-gradient(135deg, rgba(37, 99, 235, 0.05), transparent)' }}
             >
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '24px' }}>
+                <div id="opp-intel-header" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '24px' }}>
                     <h2 style={{ fontSize: '1.5rem', fontWeight: 900 }}>Market Intelligence Hub</h2>
-                    <span className="badge badge-trust">Real-time Pulse</span>
+                    <span className="badge badge-trust mobile-hide">Real-time Pulse</span>
                 </div>
-                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '20px' }}>
+                <div id="opp-intel-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '20px' }}>
                     {trends.map((t, i) => (
                         <div key={i} style={{ padding: '16px', borderRadius: '16px', background: '#fff', border: '1px solid var(--border-subtle)' }}>
                             <div style={{ fontSize: '0.65rem', fontWeight: 800, color: 'var(--text-dim)', textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: '4px' }}>{t.label}</div>
@@ -93,6 +93,7 @@ const Opportunities = () => {
 
             {/* CAREER UPDATES BANNER */}
             <motion.div
+                id="opp-banner"
                 initial={{ opacity: 0, scale: 0.95 }}
                 animate={{ opacity: 1, scale: 1 }}
                 style={{
@@ -115,6 +116,7 @@ const Opportunities = () => {
                 </div>
                 <button
                     onClick={() => window.open('https://web.telegram.org/k/#@goyalarsh', '_blank')}
+                    id="opp-banner-btn"
                     style={{
                         background: '#fff',
                         color: '#0ea5e9',
@@ -135,19 +137,19 @@ const Opportunities = () => {
             </motion.div >
 
             {/* SEGMENTED NAVIGATION */}
-            < div style={{ display: 'flex', justifyContent: 'center' }}>
-                <div className="tabs">
+            < div style={{ display: 'flex', justifyContent: 'center', maxWidth: '100%' }}>
+                <div className="tabs no-scrollbar" style={{ overflowX: 'auto', display: 'flex', padding: '4px' }}>
                     <button
                         className={`seg-btn ${type === 'internships' ? 'active' : ''}`}
                         onClick={() => setType('internships')}
-                        style={{ display: 'flex', alignItems: 'center', gap: '8px' }}
+                        style={{ display: 'flex', alignItems: 'center', gap: '8px', whiteSpace: 'nowrap' }}
                     >
                         <Briefcase size={16} /> Engineering Internships
                     </button>
                     <button
                         className={`seg-btn ${type === 'hackathons' ? 'active' : ''}`}
                         onClick={() => setType('hackathons')}
-                        style={{ display: 'flex', alignItems: 'center', gap: '8px' }}
+                        style={{ display: 'flex', alignItems: 'center', gap: '8px', whiteSpace: 'nowrap' }}
                     >
                         <Trophy size={16} /> Innovation & Hackathons
                     </button>
@@ -161,7 +163,7 @@ const Opportunities = () => {
                     initial={{ opacity: 0, scale: 0.98 }}
                     animate={{ opacity: 1, scale: 1 }}
                     exit={{ opacity: 0, scale: 1.02 }}
-                    className="grid grid-2"
+                    className="grid grid-2 opp-card-grid"
                     style={{ gridTemplateColumns: 'repeat(auto-fill, minmax(350px, 1fr))', gap: '24px' }}
                 >
                     {loading ? (
@@ -234,6 +236,35 @@ const Opportunities = () => {
                     ))}
                 </motion.div>
             </AnimatePresence >
+
+            <style>{`
+                .no-scrollbar::-webkit-scrollbar { display: none; }
+                .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+                
+                @media (max-width: 768px) {
+                    #opp-intel-grid {
+                        grid-template-columns: 1fr !important;
+                    }
+                    #opp-intel-header {
+                        flex-direction: column;
+                        align-items: flex-start;
+                        gap: 8px;
+                    }
+                    #opp-banner {
+                        flex-direction: column;
+                        text-align: left;
+                        gap: 20px;
+                        align-items: flex-start;
+                    }
+                    #opp-banner-btn {
+                        width: 100%;
+                        justify-content: center;
+                    }
+                    .opp-card-grid {
+                        grid-template-columns: 1fr !important;
+                    }
+                }
+            `}</style>
         </div >
     );
 };

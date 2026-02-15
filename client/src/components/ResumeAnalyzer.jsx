@@ -54,7 +54,7 @@ const ResumeAnalyzer = () => {
                     transition={{ duration: 0.6 }}
                     style={styles.header}
                 >
-                    <h1 style={styles.title}>
+                    <h1 id="resume-title" style={styles.title}>
                         <span style={styles.titleGradient}>Resume Intelligence</span> Lab
                     </h1>
                     <p style={styles.subtitle}>
@@ -62,9 +62,9 @@ const ResumeAnalyzer = () => {
                     </p>
                 </motion.div>
 
-                <div style={styles.grid}>
+                <div id="resume-grid" style={styles.grid}>
                     {/* LEFT COLUMN: INPUT */}
-                    <div style={styles.leftCol}>
+                    <div id="resume-left-col" style={styles.leftCol}>
                         <motion.div
                             style={styles.glassCard}
                             whileHover={{ boxShadow: "0 20px 40px rgba(0,0,0,0.1)" }}
@@ -149,7 +149,7 @@ const ResumeAnalyzer = () => {
                                     style={styles.resultsContainer}
                                 >
                                     {/* SCORE CARD */}
-                                    <div style={styles.scoreCard}>
+                                    <div id="resume-score-card" style={styles.scoreCard}>
                                         <div style={styles.scoreRing}>
                                             <svg width="120" height="120" viewBox="0 0 120 120">
                                                 <circle cx="60" cy="60" r="54" fill="none" stroke="rgba(0,0,0,0.05)" strokeWidth="8" />
@@ -182,7 +182,7 @@ const ResumeAnalyzer = () => {
                                     </div>
 
                                     {/* KEY METRICS */}
-                                    <div style={styles.metricsGrid}>
+                                    <div id="resume-metrics-grid" style={styles.metricsGrid}>
                                         <div style={styles.metricCard}>
                                             <CheckCircle size={20} color="#16a34a" />
                                             <div>
@@ -678,15 +678,43 @@ const styles = {
         maxWidth: "340px",
         lineHeight: 1.6,
         fontWeight: "500"
-    },
-    "@media (max-width: 1100px)": {
-        grid: {
-            gridTemplateColumns: "1fr"
-        },
-        leftCol: {
-            position: "static"
-        }
     }
 };
+
+// Inject Mobile Overrides
+if (typeof window !== 'undefined') {
+    const style = document.createElement('style');
+    style.innerHTML = `
+        @media (max-width: 1024px) {
+            #resume-grid {
+                grid-template-columns: 1fr !important;
+            }
+            #resume-left-col {
+                position: static !important;
+            }
+            #resume-title {
+                font-size: 2.5rem !important;
+            }
+        }
+        @media (max-width: 768px) {
+            #resume-title {
+                font-size: 2rem !important;
+            }
+            #resume-score-card {
+                flex-direction: column !important;
+                padding: 30px !important;
+                text-align: center !important;
+            }
+            #resume-metrics-grid {
+                grid-template-columns: 1fr !important;
+            }
+            #resume-glass-card {
+                padding: 20px !important;
+            }
+        }
+    `;
+    document.head.appendChild(style);
+}
+
 
 export default ResumeAnalyzer;

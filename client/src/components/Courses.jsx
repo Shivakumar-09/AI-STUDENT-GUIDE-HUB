@@ -274,14 +274,14 @@ const Courses = () => {
 
     return (
         <section style={{ marginTop: '48px' }}>
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '32px' }}>
+            <div className="mobile-stack" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '32px' }}>
                 <div>
-                    <h2 style={{ fontSize: '1.75rem', fontWeight: 950, color: 'var(--text-main)', marginBottom: '8px' }}>
+                    <h2 className="text-center-mobile" style={{ fontSize: '1.75rem', fontWeight: 950, color: 'var(--text-main)', marginBottom: '8px' }}>
                         Curated Learning Academy 🎓
                     </h2>
-                    <p style={{ color: 'var(--text-dim)', fontWeight: 600 }}>Curated free resources extracted from premium sources.</p>
+                    <p className="text-center-mobile" style={{ color: 'var(--text-dim)', fontWeight: 600 }}>Curated free resources extracted from premium sources.</p>
                 </div>
-                <div style={{ display: 'flex', gap: '8px', background: '#f1f5f9', padding: '6px', borderRadius: '16px' }}>
+                <div style={{ display: 'flex', gap: '8px', background: '#f1f5f9', padding: '6px', borderRadius: '16px', overflowX: 'auto', maxWidth: '100%' }} className="no-scrollbar">
                     {categories.map(cat => (
                         <button
                             key={cat}
@@ -290,7 +290,8 @@ const Courses = () => {
                                 padding: '8px 16px', borderRadius: '12px', fontSize: '0.75rem', fontWeight: 800, border: 'none',
                                 background: filter === cat ? '#fff' : 'transparent',
                                 color: filter === cat ? 'var(--accent)' : 'var(--text-dim)',
-                                cursor: 'pointer', transition: '0.2s', boxShadow: filter === cat ? '0 2px 8px rgba(0,0,0,0.05)' : 'none'
+                                cursor: 'pointer', transition: '0.2s', boxShadow: filter === cat ? '0 2px 8px rgba(0,0,0,0.05)' : 'none',
+                                whiteSpace: 'nowrap'
                             }}
                         >
                             {cat}
@@ -301,6 +302,7 @@ const Courses = () => {
 
             {/* COURSEVANIA BANNER */}
             <div
+                className="mobile-stack"
                 style={{
                     background: 'linear-gradient(90deg, #2563eb, #7c3aed)',
                     borderRadius: '20px',
@@ -310,7 +312,8 @@ const Courses = () => {
                     alignItems: 'center',
                     justifyContent: 'space-between',
                     color: '#fff',
-                    boxShadow: '0 10px 30px rgba(37, 99, 235, 0.3)'
+                    boxShadow: '0 10px 30px rgba(37, 99, 235, 0.3)',
+                    textAlign: 'left'
                 }}
             >
                 <div>
@@ -324,6 +327,7 @@ const Courses = () => {
                     href="https://t.me/Coursevania"
                     target="_blank"
                     rel="noopener noreferrer"
+                    className="w-full-mobile"
                     style={{
                         background: '#fff',
                         color: 'var(--learning)',
@@ -334,15 +338,17 @@ const Courses = () => {
                         fontSize: '0.9rem',
                         display: 'flex',
                         alignItems: 'center',
+                        justifyContent: 'center',
                         gap: '8px',
-                        transition: 'transform 0.2s'
+                        transition: 'transform 0.2s',
+                        marginTop: '16px'
                     }}
                 >
                     JOIN CHANNEL 🚀
                 </a>
             </div>
 
-            <div style={{
+            <div className="course-grid-mobile" style={{
                 display: 'grid',
                 gridTemplateColumns: 'repeat(auto-fill, minmax(320px, 1fr))',
                 gap: '32px'
@@ -360,7 +366,7 @@ const Courses = () => {
                         {/* THE CARD TOP AREA */}
                         <div style={{
                             height: '120px', background: `linear-gradient(135deg, ${course.color}, ${course.color}dd)`,
-                            position: 'relative', padding: '24px', display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start'
+                            position: 'relative', padding: '12px 24px', display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start'
                         }}>
                             <div style={{
                                 width: '48px', height: '48px', borderRadius: '14px', background: 'rgba(255,255,255,0.2)',
@@ -370,7 +376,7 @@ const Courses = () => {
                             </div>
                             <div style={{
                                 padding: '6px 12px', borderRadius: '10px', background: 'rgba(255,255,255,0.25)',
-                                color: '#fff', fontSize: '0.65rem', fontWeight: 900, letterSpacing: '0.05em', backdropFilter: 'blur(10px)'
+                                color: '#fff', fontSize: '0.55rem', fontWeight: 900, letterSpacing: '0.05em', backdropFilter: 'blur(10px)', maxWidth: '140px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap'
                             }}>
                                 {course.badge}
                             </div>
@@ -385,7 +391,7 @@ const Courses = () => {
                                 {course.title}
                             </h4>
 
-                            <div style={{ display: 'flex', itemsCenter: 'center', gap: '10px', marginBottom: '24px' }}>
+                            <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '24px' }}>
                                 <div style={{ width: '32px', height: '32px', borderRadius: '50%', background: '#f1f5f9', display: 'grid', placeItems: 'center', fontSize: '0.8rem' }}>👤</div>
                                 <div>
                                     <div style={{ fontSize: '0.8rem', fontWeight: 800, color: 'var(--text-main)' }}>{course.instructor}</div>
@@ -419,7 +425,7 @@ const Courses = () => {
                             <button
                                 style={{
                                     width: '100%', padding: '14px', borderRadius: '16px',
-                                    background: 'blue', color: '#fff', fontWeight: 900,
+                                    background: course.color, color: '#fff', fontWeight: 900,
                                     border: 'none', cursor: 'pointer', fontSize: '0.85rem'
                                 }}
                             >
@@ -429,6 +435,16 @@ const Courses = () => {
                     </div>
                 ))}
             </div>
+
+            <style>{`
+                .no-scrollbar::-webkit-scrollbar { display: none; }
+                .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+                @media (max-width: 768px) {
+                    .course-grid-mobile {
+                        grid-template-columns: 1fr !important;
+                    }
+                }
+            `}</style>
         </section>
     );
 };
