@@ -227,7 +227,29 @@ const Mentor = () => {
                 .chat-messages::-webkit-scrollbar-thumb { background: #e2e8f0; borderRadius: 10px; }
                 input:focus { border-color: var(--accent) !important; box-shadow: 0 0 0 4px var(--accent-glow); }
                 @media (max-width: 1000px) {
-                    .mentor-sidebar { display: none !important; }
+                    .mentor-redesign-container { 
+                        flex-direction: column !important; 
+                        height: auto !important;
+                        gap: 20px !important;
+                    }
+                    .mentor-sidebar { 
+                        width: 100% !important; 
+                        order: 2;
+                    }
+                    .chat-container-main {
+                        height: 500px !important;
+                        order: 1;
+                    }
+                    .chat-messages {
+                        padding: 16px !important;
+                    }
+                    .chat-input-area {
+                        padding: 12px !important;
+                        gap: 8px !important;
+                    }
+                    .chat-input-area button {
+                        padding: 0 16px !important;
+                    }
                 }
             `}</style>
         </div>

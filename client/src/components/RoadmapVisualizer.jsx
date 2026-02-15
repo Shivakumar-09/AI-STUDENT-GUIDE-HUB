@@ -22,21 +22,21 @@ const RoadmapVisualizer = ({ roadmap }) => {
                     const isLeft = index % 2 === 0;
 
                     return (
-                        <div key={index} style={styles.row}>
+                        <div key={index} style={styles.row} className="roadmap-row-mobile">
                             {/* LEFT SIDE */}
-                            <div style={styles.side}>
+                            <div style={styles.side} className="roadmap-side-left-mobile">
                                 {isLeft && <GlassCard week={week} index={index} />}
                             </div>
 
                             {/* CENTER */}
-                            <div style={styles.center}>
-                                <div style={styles.line} />
+                            <div style={styles.center} className="roadmap-center-mobile">
+                                <div style={styles.line} className="roadmap-line-mobile" />
                                 <div style={styles.dot} />
                             </div>
 
                             {/* RIGHT SIDE */}
-                            <div style={styles.side}>
-                                {!isLeft && <GlassCard week={week} index={index} />}
+                            <div style={styles.side} className="roadmap-side-right-mobile">
+                                {!isLeft ? <GlassCard week={week} index={index} /> : <div className="mobile-show"><GlassCard week={week} index={index} /></div>}
                             </div>
                         </div>
                     );
@@ -66,6 +66,7 @@ const GlassCard = ({ week, index }) => (
         viewport={{ once: true }}
         transition={{ duration: 0.45 }}
         style={styles.card}
+        className="roadmap-card-mobile"
     >
         <div style={styles.week}>WEEK {index + 1}</div>
         <h3 style={styles.title}>{week.title}</h3>
@@ -214,5 +215,37 @@ const styles = {
         color: "#0f172a",
     },
 };
+
+// Injecting mobile styles for RoadmapVisualizer
+if (typeof document !== 'undefined') {
+    const styleSheet = document.createElement("style");
+    styleSheet.innerText = `
+        @media (max-width: 768px) {
+            .roadmap-row-mobile {
+                grid-template-columns: 40px 1fr !important;
+                gap: 16px !important;
+            }
+            .roadmap-side-left-mobile {
+                display: none !important;
+            }
+            .roadmap-side-right-mobile {
+                justify-content: flex-start !important;
+                grid-column: 2 !important;
+            }
+            .roadmap-center-mobile {
+                grid-column: 1 !important;
+            }
+            .roadmap-line-mobile {
+                left: 19px !important;
+                height: 150px !important;
+                top: -75px !important;
+            }
+            .roadmap-card-mobile {
+                max-width: 100% !important;
+            }
+        }
+    `;
+    document.head.appendChild(styleSheet);
+}
 
 export default RoadmapVisualizer;

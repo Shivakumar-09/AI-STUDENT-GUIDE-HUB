@@ -34,7 +34,7 @@ const Dashboard = ({ user }) => {
                     style={styles.welcomeSection}
                 >
                     <div style={styles.welcomeText}>
-                        <h1 style={styles.greeting}>
+                        <h1 className="greeting-mobile" style={styles.greeting}>
                             Hello, <span style={styles.gradientText}>{user?.name?.split(" ")[0] || "Student"}</span> 👋
                         </h1>
                         <p style={styles.subGreeting}>
@@ -44,7 +44,7 @@ const Dashboard = ({ user }) => {
                 </motion.div>
 
                 {/* DASHBOARD GRID */}
-                <div style={styles.dashboardGrid}>
+                <div className="dashboard-grid-mobile" style={styles.dashboardGrid}>
 
                     {/* LEFT COLUMN */}
                     <div style={styles.colLeft}>
@@ -64,7 +64,7 @@ const Dashboard = ({ user }) => {
                                 </div>
                             </div>
 
-                            <h2 style={styles.featuredTitle}>Master System Design Basics</h2>
+                            <h2 className="featured-title-mobile" style={styles.featuredTitle}>Master System Design Basics</h2>
                             <p style={styles.featuredDesc}>
                                 Your mock interview data suggests this is your biggest lever for MAANG improvement right now.
                             </p>
@@ -479,7 +479,46 @@ const styles = {
         fontWeight: "600",
         cursor: "pointer",
         transition: "all 0.2s"
+    },
+    // MOBILE OVERRIDES
+    '@media (max-width: 900px)': {
+        dashboardGrid: {
+            gridTemplateColumns: "1fr",
+            gap: "24px"
+        },
+        greeting: {
+            fontSize: "1.5rem"
+        },
+        featuredTitle: {
+            fontSize: "1.5rem"
+        },
+        page: {
+            padding: "16px"
+        },
+        featuredCard: {
+            padding: "24px"
+        }
     }
 };
+
+// Injecting media styles directly for simplicity since it's using a style object
+if (typeof document !== 'undefined') {
+    const styleSheet = document.createElement("style");
+    styleSheet.innerText = `
+        @media (max-width: 900px) {
+            .dashboard-grid-mobile {
+                grid-template-columns: 1fr !important;
+                gap: 24px !important;
+            }
+            .greeting-mobile {
+                font-size: 1.5rem !important;
+            }
+            .featured-title-mobile {
+                font-size: 1.5rem !important;
+            }
+        }
+    `;
+    document.head.appendChild(styleSheet);
+}
 
 export default Dashboard;

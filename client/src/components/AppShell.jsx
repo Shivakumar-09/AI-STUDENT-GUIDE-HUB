@@ -43,7 +43,7 @@ const AppShell = ({ children, onLogout }) => {
                     <div style={styles.logo}>
                         <Sparkles size={18} />
                     </div>
-                    <span style={styles.brand}>AI STUDENT GUIDE HUB</span>
+                    <span style={styles.brand}>GUIDE HUB</span>
                 </div>
 
                 {/* DESKTOP NAV */}
@@ -82,9 +82,9 @@ const AppShell = ({ children, onLogout }) => {
                         <span style={styles.dot} />
                     </div>
 
-                    <div style={styles.divider} />
+                    <div style={styles.divider} className="desktop-only" />
 
-                    <button onClick={onLogout} style={styles.logout}>
+                    <button onClick={onLogout} style={styles.logout} className="desktop-only">
                         <LogOut size={15} />
                         Logout
                     </button>
@@ -92,7 +92,7 @@ const AppShell = ({ children, onLogout }) => {
             </motion.nav>
 
             {/* MAIN CONTENT */}
-            <main style={styles.main}>
+            <main style={styles.main} className="app-main-content">
                 <AnimatePresence mode="wait">
                     <motion.div
                         key={location.pathname}
@@ -106,15 +106,45 @@ const AppShell = ({ children, onLogout }) => {
                 </AnimatePresence>
             </main>
 
+            {/* MOBILE BOTTOM NAV */}
+            <div className="mobile-nav" style={styles.mobileBottomNav}>
+                {navItems.slice(0, 5).map((item) => {
+                    const active = isActive(item.path);
+                    const Icon = item.icon;
+                    return (
+                        <div
+                            key={item.path}
+                            onClick={() => navigate(item.path)}
+                            style={{
+                                ...styles.mobileNavItem,
+                                color: active ? "#6366f1" : "#94a3b8",
+                            }}
+                        >
+                            <Icon size={20} strokeWidth={active ? 2.5 : 2} />
+                            <span style={{ fontSize: '0.65rem', fontWeight: active ? 700 : 500 }}>{item.label}</span>
+                        </div>
+                    );
+                })}
+            </div>
+
             {/* FOOTER */}
-            <footer style={styles.footer}>
+            <footer style={styles.footer} className="desktop-only">
                 © 2026 Road2Success · Designed for students
             </footer>
 
-            {/* MOBILE CSS */}
+            {/* RESPONSIVE CSS OVERRIDES */}
             <style>{`
         @media (max-width: 1024px) {
           .desktop-nav { display: none !important; }
+          .desktop-only { display: none !important; }
+          .mobile-nav { display: flex !important; }
+          .app-main-content { padding: 16px !important; padding-bottom: 90px !important; }
+        }
+        @media (min-width: 1025px) {
+          .mobile-nav { display: none !important; }
+        }
+        @media (max-width: 480px) {
+            .brand { display: none !important; }
         }
       `}</style>
         </div>
@@ -138,8 +168,8 @@ const styles = {
         position: "sticky",
         top: 0,
         zIndex: 50,
-        height: "68px",
-        padding: "0 28px",
+        height: "calc(68px + env(safe-area-inset-top))",
+        padding: "env(safe-area-inset-top) 28px 0",
         display: "flex",
         alignItems: "center",
         justifyContent: "space-between",
@@ -263,6 +293,33 @@ const styles = {
         textAlign: "center",
         color: "#94a3b8",
         borderTop: "1px solid rgba(0,0,0,0.06)",
+        paddingBottom: "calc(22px + env(safe-area-inset-bottom))",
+    },
+
+    mobileBottomNav: {
+        position: "fixed",
+        bottom: 0,
+        left: 0,
+        right: 0,
+        height: "calc(72px + env(safe-area-inset-bottom))",
+        background: "rgba(255,255,255,0.9)",
+        backdropFilter: "blur(20px)",
+        WebkitBackdropFilter: "blur(20px)",
+        display: "flex",
+        alignItems: "flex-start",
+        justifyContent: "space-around",
+        borderTop: "1px solid rgba(0,0,0,0.08)",
+        zIndex: 100,
+        padding: "12px 10px env(safe-area-inset-bottom)",
+    },
+
+    mobileNavItem: {
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+        gap: "4px",
+        cursor: "pointer",
+        flex: 1,
     },
 };
 

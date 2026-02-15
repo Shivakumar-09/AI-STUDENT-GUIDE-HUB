@@ -58,6 +58,21 @@
   margin: 0;
   padding: 0;
   box-sizing: border-box;
+  /* Native Mobile Resets */
+  -webkit-tap-highlight-color: transparent;
+  -webkit-touch-callout: none;
+}
+
+html, body {
+  /* Prevent scrolling artifacts and selection */
+  overscroll-behavior-y: none;
+  user-select: none;
+  height: 100%;
+}
+
+input, textarea {
+  /* Re-enable selection for inputs */
+  user-select: text !important;
 }
 
 body {
@@ -67,6 +82,12 @@ body {
   overflow-x: hidden;
   -webkit-font-smoothing: antialiased;
   line-height: 1.5;
+  
+  /* Safe Area Support */
+  padding-top: env(safe-area-inset-top);
+  padding-bottom: env(safe-area-inset-bottom);
+  padding-left: env(safe-area-inset-left);
+  padding-right: env(safe-area-inset-right);
 }
 
 h1,
