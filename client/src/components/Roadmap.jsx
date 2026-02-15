@@ -235,8 +235,44 @@ const detectRoadmap = (track) => {
         return ROADMAP_DEFINITIONS.react_frontend;
     }
 
-    if (t.includes('ai') || t.includes('ml')) {
+    if (t.includes('ai') || t.includes('ml') || t.includes('intelligence') || t.includes('llama')) {
         return ROADMAP_DEFINITIONS.ai_engineer;
+    }
+
+    if (t.includes('cloud') || t.includes('aws') || t.includes('azure') || t.includes('google cloud')) {
+        return {
+            title: 'Cloud Engineering Path',
+            summary: 'Master <strong>Cloud Infrastructure</strong>, scaling, and architectural patterns.',
+            weeks: [
+                { title: 'Cloud Foundations', focus: 'Core cloud concepts.', topics: ['IaaS/PaaS', 'Networking', 'IAM'], project: 'Cloud Budget setup', status: 'completed' },
+                { title: 'Serverless & Compute', focus: 'Building scalable logic.', topics: ['Lambda/Functions', 'EC2/VMs'], project: 'Static Web Hosting', status: 'pending' },
+                { title: 'Cloud Architecture', focus: 'High availability systems.', topics: ['Load Balancers', 'Auto-scaling', 'DBs'], project: 'Multi-region App', status: 'pending' }
+            ]
+        };
+    }
+
+    if (t.includes('devops') || t.includes('kubernetes') || t.includes('docker') || t.includes('jenkins')) {
+        return {
+            title: 'DevOps & SRE Roadmap',
+            summary: 'Automate <strong>pipelines</strong> and manage <strong>containerized</strong> environments.',
+            weeks: [
+                { title: 'CI/CD Foundations', focus: 'Automation pipelines.', topics: ['Git', 'Jenkins', 'GitHub Actions'], project: 'Automated Build', status: 'completed' },
+                { title: 'Containerization', focus: 'Packaging applications.', topics: ['Docker', 'Images', 'Volumes'], project: 'Microservice Container', status: 'pending' },
+                { title: 'Orchestration', focus: 'Scaling containers.', topics: ['Kubernetes', 'Helm', 'Pods'], project: 'K8s Deployment', status: 'pending' }
+            ]
+        };
+    }
+
+    if (t.includes('cyber') || t.includes('security') || t.includes('hacking')) {
+        return {
+            title: 'Cybersecurity Specialist',
+            summary: 'Protect <strong>systems</strong> and <strong>networks</strong> from modern threats.',
+            weeks: [
+                { title: 'Security Basics', focus: 'Network security.', topics: ['TCP/IP', 'Firewalls', 'VPNs'], project: 'Secure Home Net', status: 'completed' },
+                { title: 'Vulnerability Analysis', focus: 'Finding flaws.', topics: ['Pen Testing', 'OWASP Top 10'], project: 'App Audit', status: 'pending' },
+                { title: 'Incident Response', focus: 'Handling breaches.', topics: ['Forensics', 'Recovery', 'SIEM'], project: 'Response Plan', status: 'pending' }
+            ]
+        };
     }
 
     return {
@@ -244,17 +280,17 @@ const detectRoadmap = (track) => {
         summary: `A structured roadmap to master <strong>${track}</strong> from fundamentals to production.`,
         weeks: [
             {
-                title: 'Foundations',
-                focus: 'Core concepts.',
-                topics: ['Basics', 'Syntax', 'Data Structures'],
-                project: 'CLI Tool',
+                title: 'Phase 1: Foundations',
+                focus: 'Core concepts and syntax.',
+                topics: ['Basics', 'Internal structures', 'Tooling'],
+                project: 'Starter Project',
                 status: 'completed'
             },
             {
-                title: 'Advanced Concepts',
+                title: 'Phase 2: Mastery',
                 focus: 'Architecture and optimization.',
-                topics: ['Design Patterns', 'Async'],
-                project: 'Processing Engine',
+                topics: ['Advanced Patterns', 'Performance', 'Scale'],
+                project: 'Production-ready System',
                 status: 'pending'
             }
         ]
@@ -322,7 +358,8 @@ const Roadmap = () => {
                             padding: '18px 22px',
                             fontSize: '1.1rem',
                             borderRadius: '12px',
-                            border: '2px solid #e5e7eb'
+                            border: '2px solid #e5e7eb',
+                            boxShadow: '0 4px 12px rgba(0,0,0,0.03)'
                         }}
                     />
                     <button
@@ -338,13 +375,106 @@ const Roadmap = () => {
                             background: '#0f172a',
                             color: '#fff',
                             fontWeight: 700,
-                            opacity: loading ? 0.6 : 1
+                            opacity: loading ? 0.6 : 1,
+                            cursor: 'pointer'
                         }}
                     >
                         Generate
                     </button>
                 </div>
             </div>
+
+            {/* INDUSTRY STANDARDS SECTION */}
+            {!roadmap && !loading && (
+                <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    style={{ maxWidth: '1200px', margin: '0 auto 80px', padding: '0 30px' }}
+                >
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '32px' }}>
+                        <div>
+                            <h2 style={{ fontSize: '1.8rem', fontWeight: 800, color: '#0f172a' }}>Industry Standard Roadmaps</h2>
+                            <p style={{ color: '#64748b', marginTop: '4px' }}>Curated learning paths for the most in-demand roles in 2024-2025</p>
+                        </div>
+                    </div>
+
+                    <div className="industry-grid" style={{
+                        display: 'grid',
+                        gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))',
+                        gap: '24px'
+                    }}>
+                        {INDUSTRY_COURSES.map((course, i) => (
+                            <motion.div
+                                key={i}
+                                whileHover={{ y: -5, boxShadow: '0 12px 24px rgba(0,0,0,0.08)' }}
+                                style={{
+                                    padding: '24px',
+                                    borderRadius: '20px',
+                                    background: '#fff',
+                                    border: '1px solid #e5e7eb',
+                                    display: 'flex',
+                                    flexDirection: 'column',
+                                    justifyContent: 'space-between',
+                                    transition: 'all 0.3s ease'
+                                }}
+                            >
+                                <div>
+                                    <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '16px' }}>
+                                        <span style={{
+                                            fontSize: '0.65rem',
+                                            fontWeight: 800,
+                                            textTransform: 'uppercase',
+                                            color: '#6366f1',
+                                            background: '#f5f3ff',
+                                            padding: '4px 8px',
+                                            borderRadius: '6px'
+                                        }}>
+                                            {course.category}
+                                        </span>
+                                        <span style={{ fontSize: '0.75rem', fontWeight: 700, color: '#94a3b8' }}>{course.provider}</span>
+                                    </div>
+                                    <h3 style={{ fontSize: '1.1rem', fontWeight: 800, marginBottom: '12px', lineHeight: 1.4 }}>{course.title}</h3>
+                                </div>
+
+                                <button
+                                    onClick={() => {
+                                        setTrack(course.title);
+                                        setRoadmap(null);
+                                        // Trigger generation after a tiny delay
+                                        setTimeout(() => {
+                                            const selected = detectRoadmap(course.title);
+                                            setRoadmap(selected);
+                                            window.scrollTo({ top: 400, behavior: 'smooth' });
+                                        }, 100);
+                                    }}
+                                    style={{
+                                        width: '100%',
+                                        padding: '10px',
+                                        borderRadius: '10px',
+                                        background: '#f8fafc',
+                                        border: '1px solid #e2e8f0',
+                                        color: '#0f172a',
+                                        fontWeight: 700,
+                                        fontSize: '0.85rem',
+                                        cursor: 'pointer',
+                                        marginTop: '16px'
+                                    }}
+                                >
+                                    Quick View Roadmap
+                                </button>
+                            </motion.div>
+                        ))}
+                    </div>
+                </motion.div>
+            )}
+
+            <style>{`
+                @media (max-width: 768px) {
+                    .industry-grid {
+                        grid-template-columns: 1fr !important;
+                    }
+                }
+            `}</style>
 
             {/* THINKING */}
             <AnimatePresence>
