@@ -84,9 +84,9 @@ const AppShell = ({ children, onLogout }) => {
 
                     <div style={styles.divider} className="desktop-only" />
 
-                    <button onClick={onLogout} style={styles.logout} className="desktop-only">
-                        <LogOut size={15} />
-                        Logout
+                    <button onClick={onLogout} style={styles.logout}>
+                        <LogOut size={16} />
+                        <span className="desktop-only">Logout</span>
                     </button>
                 </div>
             </motion.nav>
