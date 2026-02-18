@@ -219,6 +219,180 @@ const ROADMAP_DEFINITIONS = {
                 ]
             }
         ]
+    },
+
+    data_engineer: {
+        title: 'Data Engineering',
+        summary: 'Build scalable <strong>data pipelines</strong> and analytics infrastructure.',
+        weeks: [
+            {
+                title: 'SQL & Data Basics',
+                focus: 'Strong database foundations.',
+                topics: ['SQL', 'Normalization', 'Indexing'],
+                project: 'Analytics DB Setup',
+                status: 'completed',
+                time: '15h',
+                difficulty: 'Beginner'
+            },
+            {
+                title: 'Python for Data',
+                focus: 'Data processing.',
+                topics: ['Pandas', 'NumPy', 'Data Cleaning'],
+                project: 'Data Cleaning Pipeline',
+                status: 'in-progress',
+                time: '20h',
+                difficulty: 'Intermediate'
+            },
+            {
+                title: 'Big Data Tools',
+                focus: 'Distributed systems.',
+                topics: ['Spark', 'Hadoop', 'ETL'],
+                project: 'Mini ETL System',
+                status: 'pending',
+                time: '30h',
+                difficulty: 'Advanced'
+            }
+        ]
+    },
+
+    blockchain_dev: {
+        title: 'Blockchain Developer',
+        summary: 'Master <strong>Web3</strong>, smart contracts, and decentralized apps.',
+        weeks: [
+            {
+                title: 'Blockchain Basics',
+                focus: 'Core fundamentals.',
+                topics: ['Cryptography', 'Bitcoin', 'Ethereum'],
+                project: 'Blockchain Demo',
+                status: 'completed'
+            },
+            {
+                title: 'Solidity',
+                focus: 'Smart contract development.',
+                topics: ['Solidity', 'Remix', 'MetaMask'],
+                project: 'Token Contract',
+                status: 'in-progress'
+            },
+            {
+                title: 'DApp Development',
+                focus: 'Frontend + Smart Contracts.',
+                topics: ['Web3.js', 'Wallet Integration'],
+                project: 'Mini NFT DApp',
+                status: 'pending'
+            }
+        ]
+    },
+
+    mobile_dev: {
+        title: 'Mobile App Development',
+        summary: 'Build cross-platform <strong>mobile apps</strong> with modern frameworks.',
+        weeks: [
+            {
+                title: 'Dart / JavaScript Basics',
+                focus: 'Language foundations.',
+                topics: ['Dart Basics', 'ES6'],
+                project: 'Basic App UI',
+                status: 'completed'
+            },
+            {
+                title: 'Flutter / React Native',
+                focus: 'App Development.',
+                topics: ['State Management', 'Navigation'],
+                project: 'Todo Mobile App',
+                status: 'in-progress'
+            },
+            {
+                title: 'API Integration',
+                focus: 'Connect backend services.',
+                topics: ['REST', 'Firebase'],
+                project: 'Chat App',
+                status: 'pending'
+            }
+        ]
+    },
+
+    game_dev: {
+        title: 'Game Development (Unity)',
+        summary: 'Create interactive <strong>2D/3D games</strong>.',
+        weeks: [
+            {
+                title: 'C# Basics',
+                focus: 'Game scripting.',
+                topics: ['OOP', 'Game Loops'],
+                project: 'Mini 2D Game',
+                status: 'completed'
+            },
+            {
+                title: 'Unity Engine',
+                focus: 'Scene & Physics.',
+                topics: ['RigidBody', 'Colliders'],
+                project: 'Platformer Game',
+                status: 'in-progress'
+            },
+            {
+                title: 'Advanced Gameplay',
+                focus: 'AI & Multiplayer.',
+                topics: ['Pathfinding', 'Photon'],
+                project: 'Multiplayer Game',
+                status: 'pending'
+            }
+        ]
+    },
+
+    data_analyst: {
+        title: 'Data Analyst',
+        summary: 'Master <strong>data visualization</strong> and business insights.',
+        weeks: [
+            {
+                title: 'Excel & SQL',
+                focus: 'Data querying.',
+                topics: ['Pivot Tables', 'Joins'],
+                project: 'Sales Dashboard',
+                status: 'completed'
+            },
+            {
+                title: 'Python for Analysis',
+                focus: 'Data exploration.',
+                topics: ['Pandas', 'Matplotlib'],
+                project: 'Trend Analysis',
+                status: 'in-progress'
+            },
+            {
+                title: 'Power BI / Tableau',
+                focus: 'Visualization.',
+                topics: ['Dashboards', 'Storytelling'],
+                project: 'Business Insights Report',
+                status: 'pending'
+            }
+        ]
+    },
+
+    sde_product_based: {
+        title: 'SDE (Product-Based Company Preparation)',
+        summary: 'Prepare for <strong>FAANG & top product-based companies</strong>.',
+        weeks: [
+            {
+                title: 'Advanced DSA',
+                focus: 'Coding interviews.',
+                topics: ['DP', 'Graphs', 'Backtracking'],
+                project: 'Solve 300 LeetCode',
+                status: 'in-progress'
+            },
+            {
+                title: 'System Design',
+                focus: 'Scalable architecture.',
+                topics: ['Load Balancers', 'Caching'],
+                project: 'Design Twitter',
+                status: 'pending'
+            },
+            {
+                title: 'Core CS',
+                focus: 'Interview theory.',
+                topics: ['OS', 'DBMS', 'Networking'],
+                project: 'Mock Interviews',
+                status: 'pending'
+            }
+        ]
     }
 };
 
@@ -228,6 +402,36 @@ const INDUSTRY_COURSES = [
         title: "AI Engineer 2026: Gen AI, Deep Learning & LLMs",
         provider: "Udemy",
         category: "Artificial Intelligence"
+    },
+    {
+        title: "Data Engineering",
+        provider: "Industry Choice",
+        category: "Data Engineering"
+    },
+    {
+        title: "Blockchain Developer",
+        provider: "Web3 Standard",
+        category: "Blockchain"
+    },
+    {
+        title: "Mobile App Development",
+        provider: "Cross-Platform",
+        category: "Mobile"
+    },
+    {
+        title: "Game Development (Unity)",
+        provider: "Gaming Standard",
+        category: "Game Dev"
+    },
+    {
+        title: "Data Analyst",
+        provider: "Business Intelligence",
+        category: "Analytics"
+    },
+    {
+        title: "SDE (Product-Based Company Preparation)",
+        provider: "FAANG Prep",
+        category: "Career"
     },
     {
         title: "Data Structures & Algorithms: Developer’s Guide",
@@ -261,6 +465,30 @@ const detectRoadmap = (track) => {
 
     if (t.includes('ai') || t.includes('ml') || t.includes('intelligence') || t.includes('llama')) {
         return ROADMAP_DEFINITIONS.ai_engineer;
+    }
+
+    if (t.includes('data') && t.includes('engineer')) {
+        return ROADMAP_DEFINITIONS.data_engineer;
+    }
+
+    if (t.includes('blockchain') || t.includes('web3') || t.includes('crypto')) {
+        return ROADMAP_DEFINITIONS.blockchain_dev;
+    }
+
+    if (t.includes('mobile') || t.includes('flutter') || t.includes('android') || t.includes('ios')) {
+        return ROADMAP_DEFINITIONS.mobile_dev;
+    }
+
+    if (t.includes('game') || t.includes('unity') || t.includes('unreal')) {
+        return ROADMAP_DEFINITIONS.game_dev;
+    }
+
+    if (t.includes('analyst') || t.includes('analytics') || t.includes('visualization')) {
+        return ROADMAP_DEFINITIONS.data_analyst;
+    }
+
+    if (t.includes('sde') || t.includes('faang') || t.includes('product') || t.includes('interview')) {
+        return ROADMAP_DEFINITIONS.sde_product_based;
     }
 
     if (t.includes('cloud') || t.includes('aws') || t.includes('azure') || t.includes('google cloud')) {
