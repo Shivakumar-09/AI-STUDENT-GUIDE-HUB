@@ -153,12 +153,12 @@ const Auth = ({ onLogin }) => {
                             {!isLogin && (
                                 <motion.div
                                     key="signup-field"
-                                    initial={{ opacity: 0, x: 20 }}
-                                    animate={{ opacity: 1, x: 0 }}
-                                    exit={{ opacity: 0, x: -20 }}
-                                    transition={{ duration: 0.3 }}
+                                    variants={itemVariants}
+                                    initial="hidden"
+                                    animate="visible"
+                                    exit="hidden"
                                 >
-                                    <div className="input-group">
+                                    <div className="input-group" style={{ display: 'flex', flexDirection: 'column' }}>
                                         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '10px' }}>
                                             <label style={{ fontSize: '0.85rem', fontWeight: 700, color: 'var(--text-dim)', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Identity Name</label>
                                         </div>
@@ -179,42 +179,46 @@ const Auth = ({ onLogin }) => {
                             )}
                         </AnimatePresence>
 
-                        <div className="input-group">
-                            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '10px' }}>
-                                <label style={{ fontSize: '0.85rem', fontWeight: 700, color: 'var(--text-dim)', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Email Secure</label>
+                        <motion.div variants={itemVariants}>
+                            <div className="input-group" style={{ display: 'flex', flexDirection: 'column' }}>
+                                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '10px' }}>
+                                    <label style={{ fontSize: '0.85rem', fontWeight: 700, color: 'var(--text-dim)', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Email Secure</label>
+                                </div>
+                                <div style={{ position: 'relative' }}>
+                                    <span style={{ position: 'absolute', left: '18px', top: '50%', transform: 'translateY(-50%)', opacity: 0.4, fontSize: '1.1rem' }}>📧</span>
+                                    <input
+                                        type="email"
+                                        name="email"
+                                        required
+                                        value={formData.email}
+                                        onChange={handleChange}
+                                        placeholder="your@domain.ai"
+                                        style={{ width: '100%', padding: '16px 16px 16px 52px', borderRadius: '16px', background: '#f1f5f9', border: '1px solid var(--border-subtle)', color: 'var(--text-main)', fontSize: '1rem', outline: 'none', transition: '0.3s' }}
+                                    />
+                                </div>
                             </div>
-                            <div style={{ position: 'relative' }}>
-                                <span style={{ position: 'absolute', left: '18px', top: '50%', transform: 'translateY(-50%)', opacity: 0.4, fontSize: '1.1rem' }}>📧</span>
-                                <input
-                                    type="email"
-                                    name="email"
-                                    required
-                                    value={formData.email}
-                                    onChange={handleChange}
-                                    placeholder="your@domain.ai"
-                                    style={{ width: '100%', padding: '16px 16px 16px 52px', borderRadius: '16px', background: '#f1f5f9', border: '1px solid var(--border-subtle)', color: 'var(--text-main)', fontSize: '1rem', outline: 'none', transition: '0.3s' }}
-                                />
-                            </div>
-                        </div>
+                        </motion.div>
 
-                        <div className="input-group">
-                            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '10px' }}>
-                                <label style={{ fontSize: '0.85rem', fontWeight: 700, color: 'var(--text-dim)', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Access Key</label>
-                                {isLogin && <span style={{ fontSize: '0.75rem', color: 'var(--accent)', cursor: 'pointer', fontWeight: 800 }}>Forgot?</span>}
+                        <motion.div variants={itemVariants}>
+                            <div className="input-group" style={{ display: 'flex', flexDirection: 'column' }}>
+                                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '10px' }}>
+                                    <label style={{ fontSize: '0.85rem', fontWeight: 700, color: 'var(--text-dim)', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Access Key</label>
+                                    {isLogin && <span style={{ fontSize: '0.75rem', color: 'var(--accent)', cursor: 'pointer', fontWeight: 800 }}>Forgot?</span>}
+                                </div>
+                                <div style={{ position: 'relative' }}>
+                                    <span style={{ position: 'absolute', left: '18px', top: '50%', transform: 'translateY(-50%)', opacity: 0.4, fontSize: '1.1rem' }}>🔒</span>
+                                    <input
+                                        type="password"
+                                        name="password"
+                                        required
+                                        value={formData.password}
+                                        onChange={handleChange}
+                                        placeholder="••••••••"
+                                        style={{ width: '100%', padding: '16px 16px 16px 52px', borderRadius: '16px', background: '#f1f5f9', border: '1px solid var(--border-subtle)', color: 'var(--text-main)', fontSize: '1rem', outline: 'none', transition: '0.3s' }}
+                                    />
+                                </div>
                             </div>
-                            <div style={{ position: 'relative' }}>
-                                <span style={{ position: 'absolute', left: '18px', top: '50%', transform: 'translateY(-50%)', opacity: 0.4, fontSize: '1.1rem' }}>🔒</span>
-                                <input
-                                    type="password"
-                                    name="password"
-                                    required
-                                    value={formData.password}
-                                    onChange={handleChange}
-                                    placeholder="••••••••"
-                                    style={{ width: '100%', padding: '16px 16px 16px 52px', borderRadius: '16px', background: '#f1f5f9', border: '1px solid var(--border-subtle)', color: 'var(--text-main)', fontSize: '1rem', outline: 'none', transition: '0.3s' }}
-                                />
-                            </div>
-                        </div>
+                        </motion.div>
 
                         {error && (
                             <motion.div
