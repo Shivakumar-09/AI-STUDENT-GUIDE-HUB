@@ -1,299 +1,282 @@
-import React, { useState } from 'react';
-import axios from 'axios';
-import { motion, AnimatePresence } from 'framer-motion';
-import API_URL from '../config/api';
+import React, { useState } from "react";
+import axios from "axios";
+import { motion, AnimatePresence } from "framer-motion";
+import API_URL from "../config/api";
 
 const Auth = ({ onLogin }) => {
     const [isLogin, setIsLogin] = useState(true);
     const [formData, setFormData] = useState({
-        name: '', email: '', password: '', phone: '', skills: '', targetJobs: ''
+        name: "",
+        email: "",
+        password: ""
     });
     const [loading, setLoading] = useState(false);
-    const [error, setError] = useState('');
+    const [error, setError] = useState("");
 
     const handleChange = (e) => {
-        setFormData({ ...formData, [e.target.name]: e.target.value });
+        setFormData((prev) => ({ ...prev, [e.target.name]: e.target.value }));
     };
 
     const handleSubmit = async (e) => {
         e.preventDefault();
         setLoading(true);
-        setError('');
+        setError("");
 
-        const endpoint = isLogin ? '/api/auth/login' : '/api/auth/register';
+        const endpoint = isLogin ? "/api/auth/login" : "/api/auth/register";
+
         try {
             const response = await axios.post(`${API_URL}${endpoint}`, formData);
-            localStorage.setItem('token', response.data.token);
-            localStorage.setItem('user', JSON.stringify(response.data.user));
+            localStorage.setItem("token", response.data.token);
+            localStorage.setItem("user", JSON.stringify(response.data.user));
             onLogin(response.data.user);
         } catch (err) {
-            if (!err.response) {
-                setError('Cockpit Link Failed. Verify backend status.');
-            } else {
-                setError(err.response?.data?.message || 'Verification failed. Retry access.');
-            }
+            setError(err.response?.data?.message || "Something went wrong.");
         } finally {
             setLoading(false);
         }
     };
 
-    // UI Variants for Framer Motion
-    const containerVariants = {
-        hidden: { opacity: 0 },
-        visible: {
-            opacity: 1,
-            transition: { staggerChildren: 0.1, delayChildren: 0.3 }
-        }
-    };
-
-    const itemVariants = {
-        hidden: { y: 20, opacity: 0 },
-        visible: { y: 0, opacity: 1, transition: { duration: 0.6, ease: [0.22, 1, 0.36, 1] } }
-    };
-
     return (
-        <div className="auth-master-container" style={{ minHeight: '100vh', display: 'flex', background: 'var(--bg-deep)', overflow: 'hidden', position: 'relative' }}>
+        <div className="auth-wrapper">
 
-            {/* LEFT PANEL: IMMERSIVE VISUALS (Visible on Desktop) */}
-            <div className="auth-visual-panel" style={{
-                flex: '1.4',
-                position: 'relative',
-                display: 'flex',
-                flexDirection: 'column',
-                justifyContent: 'center',
-                padding: '80px',
-                background: '#f8fafc',
-            }}>
-                {/* Background effects */}
-                <div style={{ position: 'absolute', top: '-10%', left: '-10%', width: '500px', height: '500px', background: 'var(--learning)', filter: 'blur(150px)', opacity: 0.1, borderRadius: '50%' }}></div>
-                <div style={{ position: 'absolute', bottom: '0%', right: '0%', width: '400px', height: '400px', background: 'var(--intelligence)', filter: 'blur(150px)', opacity: 0.08, borderRadius: '50%' }}></div>
-                <div style={{ position: 'absolute', inset: 0, backgroundImage: 'radial-gradient(rgba(0,0,0,0.04) 1px, transparent 1px)', backgroundSize: '40px 40px', pointerEvents: 'none' }}></div>
-
-                <motion.div
-                    initial={{ opacity: 0, x: -30 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    transition={{ duration: 1, ease: [0.22, 1, 0.36, 1] }}
-                    style={{ position: 'relative', zIndex: 2 }}
-                >
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '14px', marginBottom: '32px' }}>
-                        <div style={{ width: '48px', height: '48px', background: 'var(--accent)', borderRadius: '14px', display: 'grid', placeItems: 'center', boxShadow: '0 8px 24px var(--accent-glow)' }}>
-                            <span style={{ fontSize: '1.5rem' }}>🤖</span>
-                        </div>
-                        <div style={{ display: 'flex', flexDirection: 'column' }}>
-                            <span style={{ fontSize: '0.75rem', fontWeight: 800, letterSpacing: '0.15em', color: 'var(--accent)', textTransform: 'uppercase' }}>Adaptive Engine</span>
-                            <span style={{ fontSize: '0.65rem', fontWeight: 600, color: 'var(--text-dim)' }}>SYSTEM READY • PROT-092</span>
-                        </div>
-                    </div>
-
-                    <h1 style={{ fontSize: '4.5rem', fontWeight: 900, lineHeight: 1.05, marginBottom: '32px', maxWidth: '700px', letterSpacing: '-0.03em' }}>
-                        Engineering the <span style={{ background: 'linear-gradient(to right, var(--text-main), var(--learning))', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>Future</span>, One Insight at a Time.
-                    </h1>
-
-                    <p style={{ fontSize: '1.35rem', color: 'var(--text-muted)', maxWidth: '550px', lineHeight: 1.6, marginBottom: '56px', fontWeight: 400 }}>
-                        The premier career cockpit for the next generation of product engineers. Join 12,000+ students mastering MAANG-grade engineering.
-                    </p>
-
-                    <div style={{ display: 'flex', gap: '24px' }}>
-                        <motion.div
-                            whileHover={{ y: -8, scale: 1.02 }}
-                            style={{ padding: '24px', borderRadius: '20px', background: '#f8fafc', border: '1px solid var(--border-subtle)', backdropFilter: 'blur(20px)', width: '220px' }}
-                        >
-                            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '12px' }}>
-                                <div style={{ width: '8px', height: '8px', borderRadius: '50%', background: 'var(--progress)', boxShadow: '0 0 10px var(--progress)' }}></div>
-                                <span style={{ fontSize: '0.7rem', fontWeight: 700, color: 'var(--text-dim)', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Success Rate</span>
-                            </div>
-                            <div style={{ fontSize: '2rem', fontWeight: 900, color: 'var(--text-main)' }}>94%</div>
-                        </motion.div>
-
-                        <motion.div
-                            whileHover={{ y: -8, scale: 1.02 }}
-                            style={{ padding: '24px', borderRadius: '20px', background: '#f8fafc', border: '1px solid var(--border-subtle)', backdropFilter: 'blur(20px)', width: '220px' }}
-                        >
-                            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '12px' }}>
-                                <div style={{ width: '8px', height: '8px', borderRadius: '50%', background: 'var(--intelligence)', boxShadow: '0 0 10px var(--intelligence)' }}></div>
-                                <span style={{ fontSize: '0.7rem', fontWeight: 700, color: 'var(--text-dim)', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Mentors</span>
-                            </div>
-                            <div style={{ fontSize: '2rem', fontWeight: 900, color: 'var(--text-main)' }}>12.4k</div>
-                        </motion.div>
-                    </div>
-                </motion.div>
+            {/* Animated Background Blobs */}
+            <div className="bg-blobs">
+                <div className="blob blob1"></div>
+                <div className="blob blob2"></div>
+                <div className="blob blob3"></div>
             </div>
 
-            {/* RIGHT PANEL: AUTH FORM */}
-            <div className="auth-form-panel" style={{
-                flex: '1',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                padding: '40px',
-                zIndex: 10,
-                background: '#ffffff',
-                borderLeft: '1px solid var(--border-subtle)'
-            }}>
-                <motion.div
-                    variants={containerVariants}
-                    initial="hidden"
-                    animate="visible"
-                    style={{ width: '100%', maxWidth: '400px' }}
-                >
-                    <motion.div variants={itemVariants} style={{ marginBottom: '44px' }}>
-                        <div style={{ width: '32px', height: '32px', background: 'var(--accent-glow)', borderRadius: '8px', display: 'grid', placeItems: 'center', marginBottom: '20px' }}>
-                            <span style={{ fontSize: '1rem' }}>🛡️</span>
-                        </div>
-                        <h2 style={{ fontSize: '2.5rem', fontWeight: 900, marginBottom: '12px', letterSpacing: '-0.02em' }}>
-                            {isLogin ? 'Sign In' : 'Create Account'}
-                        </h2>
-                        <p style={{ color: 'var(--text-muted)', fontSize: '1rem' }}>
-                            {isLogin ? 'Welcome back to your career cockpit.' : 'Begin your journey to MAANG-standard engineering.'}
-                        </p>
-                    </motion.div>
+            <motion.div
+                className="auth-card"
+                initial={{ opacity: 0, y: 40 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6 }}
+            >
+                <div className="logo">⚡</div>
 
-                    <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
-                        <AnimatePresence mode="wait">
-                            {!isLogin && (
-                                <motion.div
-                                    key="signup-field"
-                                    variants={itemVariants}
-                                    initial="hidden"
-                                    animate="visible"
-                                    exit="hidden"
-                                >
-                                    <div className="input-group" style={{ display: 'flex', flexDirection: 'column' }}>
-                                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '10px' }}>
-                                            <label style={{ fontSize: '0.85rem', fontWeight: 700, color: 'var(--text-dim)', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Identity Name</label>
-                                        </div>
-                                        <div style={{ position: 'relative' }}>
-                                            <span style={{ position: 'absolute', left: '18px', top: '50%', transform: 'translateY(-50%)', opacity: 0.4, fontSize: '1.1rem' }}>👤</span>
-                                            <input
-                                                type="text"
-                                                name="name"
-                                                required
-                                                value={formData.name}
-                                                onChange={handleChange}
-                                                placeholder="First Last"
-                                                style={{ width: '100%', padding: '16px 16px 16px 52px', borderRadius: '16px', background: '#f1f5f9', border: '1px solid var(--border-subtle)', color: 'var(--text-main)', fontSize: '1rem', outline: 'none', transition: '0.3s' }}
-                                            />
-                                        </div>
-                                    </div>
-                                </motion.div>
-                            )}
-                        </AnimatePresence>
+                <h1>{isLogin ? "Welcome back" : "Create your account"}</h1>
+                <p>
+                    {isLogin
+                        ? "Continue building your engineering journey."
+                        : "Start your path toward top product companies."}
+                </p>
 
-                        <motion.div variants={itemVariants}>
-                            <div className="input-group" style={{ display: 'flex', flexDirection: 'column' }}>
-                                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '10px' }}>
-                                    <label style={{ fontSize: '0.85rem', fontWeight: 700, color: 'var(--text-dim)', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Email Secure</label>
-                                </div>
-                                <div style={{ position: 'relative' }}>
-                                    <span style={{ position: 'absolute', left: '18px', top: '50%', transform: 'translateY(-50%)', opacity: 0.4, fontSize: '1.1rem' }}>📧</span>
-                                    <input
-                                        type="email"
-                                        name="email"
-                                        required
-                                        value={formData.email}
-                                        onChange={handleChange}
-                                        placeholder="your@domain.ai"
-                                        style={{ width: '100%', padding: '16px 16px 16px 52px', borderRadius: '16px', background: '#f1f5f9', border: '1px solid var(--border-subtle)', color: 'var(--text-main)', fontSize: '1rem', outline: 'none', transition: '0.3s' }}
-                                    />
-                                </div>
-                            </div>
-                        </motion.div>
-
-                        <motion.div variants={itemVariants}>
-                            <div className="input-group" style={{ display: 'flex', flexDirection: 'column' }}>
-                                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '10px' }}>
-                                    <label style={{ fontSize: '0.85rem', fontWeight: 700, color: 'var(--text-dim)', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Access Key</label>
-                                    {isLogin && <span style={{ fontSize: '0.75rem', color: 'var(--accent)', cursor: 'pointer', fontWeight: 800 }}>Forgot?</span>}
-                                </div>
-                                <div style={{ position: 'relative' }}>
-                                    <span style={{ position: 'absolute', left: '18px', top: '50%', transform: 'translateY(-50%)', opacity: 0.4, fontSize: '1.1rem' }}>🔒</span>
-                                    <input
-                                        type="password"
-                                        name="password"
-                                        required
-                                        value={formData.password}
-                                        onChange={handleChange}
-                                        placeholder="••••••••"
-                                        style={{ width: '100%', padding: '16px 16px 16px 52px', borderRadius: '16px', background: '#f1f5f9', border: '1px solid var(--border-subtle)', color: 'var(--text-main)', fontSize: '1rem', outline: 'none', transition: '0.3s' }}
-                                    />
-                                </div>
-                            </div>
-                        </motion.div>
-
-                        {error && (
-                            <motion.div
-                                initial={{ opacity: 0, scale: 0.95 }}
-                                animate={{ opacity: 1, scale: 1 }}
-                                style={{
-                                    color: 'var(--danger)',
-                                    background: 'rgba(244, 63, 94, 0.08)',
-                                    padding: '14px 18px',
-                                    borderRadius: '16px',
-                                    border: '1px solid rgba(244, 63, 94, 0.2)',
-                                    fontSize: '0.875rem',
-                                    display: 'flex',
-                                    alignItems: 'center',
-                                    gap: '10px',
-                                    fontWeight: 500
-                                }}
-                            >
-                                <span>⚠️</span> {error}
-                            </motion.div>
+                <form onSubmit={handleSubmit}>
+                    <AnimatePresence>
+                        {!isLogin && (
+                            <motion.input
+                                key="name"
+                                initial={{ opacity: 0 }}
+                                animate={{ opacity: 1 }}
+                                exit={{ opacity: 0 }}
+                                type="text"
+                                name="name"
+                                required
+                                value={formData.name}
+                                onChange={handleChange}
+                                placeholder="Full Name"
+                            />
                         )}
+                    </AnimatePresence>
 
-                        <motion.button
-                            whileHover={{ scale: 1.02, backgroundColor: 'var(--learning)' }}
-                            whileTap={{ scale: 0.98 }}
-                            type="submit"
-                            disabled={loading}
-                            style={{
-                                padding: '18px',
-                                borderRadius: '18px',
-                                background: 'var(--accent)',
-                                color: '#fff',
-                                border: 'none',
-                                fontWeight: 900,
-                                fontSize: '1.1rem',
-                                cursor: 'pointer',
-                                transition: '0.4s cubic-bezier(0.22, 1, 0.36, 1)',
-                                boxShadow: '0 12px 40px var(--accent-glow)',
-                                marginTop: '12px'
-                            }}
-                        >
-                            {loading ? (
-                                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '10px' }}>
-                                    <div className="spinner" style={{ width: '20px', height: '20px', border: '3px solid rgba(255,255,255,0.2)', borderTopColor: '#fff', borderRadius: '50%', animation: 'spin 0.8s linear infinite' }}></div>
-                                    <span>Authorizing...</span>
-                                </div>
-                            ) : (isLogin ? 'Enter System' : 'Initialize Profile')}
-                        </motion.button>
-                    </form>
+                    <input
+                        type="email"
+                        name="email"
+                        required
+                        value={formData.email}
+                        onChange={handleChange}
+                        placeholder="Email"
+                    />
 
-                    <motion.p variants={itemVariants} style={{ marginTop: '40px', textAlign: 'center', fontSize: '1rem', color: 'var(--text-muted)' }}>
-                        {isLogin ? "Not registered yet?" : "Existing user?"} {' '}
-                        <button
-                            onClick={() => setIsLogin(!isLogin)}
-                            style={{ background: 'none', border: 'none', color: 'var(--accent)', cursor: 'pointer', fontWeight: 800, textDecoration: 'underline', textUnderlineOffset: '4px' }}
-                        >
-                            {isLogin ? 'Create Account' : 'Sign In Now'}
-                        </button>
-                    </motion.p>
-                </motion.div>
-            </div>
+                    <input
+                        type="password"
+                        name="password"
+                        required
+                        value={formData.password}
+                        onChange={handleChange}
+                        placeholder="Password"
+                    />
+
+                    {error && <div className="error">{error}</div>}
+
+                    <button type="submit" disabled={loading}>
+                        {loading
+                            ? "Processing..."
+                            : isLogin
+                                ? "Sign In"
+                                : "Create Account"}
+                    </button>
+                </form>
+
+                <div className="switch">
+                    {isLogin ? "New here?" : "Already have an account?"}{" "}
+                    <span onClick={() => setIsLogin(!isLogin)}>
+                        {isLogin ? "Create one" : "Sign in"}
+                    </span>
+                </div>
+            </motion.div>
 
             <style>{`
-                @keyframes spin { to { transform: rotate(360deg); } }
-                @media (max-width: 1100px) {
-                    .auth-visual-panel { display: none !important; }
-                    .auth-form-panel { flex: 1 !important; border-left: none !important; padding: 40px 24px !important; }
-                    h2 { font-size: 2.25rem !important; }
-                }
-                input:focus {
-                    border-color: var(--accent) !important;
-                    background: #ffffff !important;
-                    box-shadow: 0 0 0 4px var(--accent-glow);
-                }
-            `}</style>
+        .auth-wrapper {
+          position: relative;
+          min-height: 100vh;
+          background: #f9fafb;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          font-family: Inter, sans-serif;
+          padding: 20px;
+          overflow: hidden;
+        }
+
+        /* ------------------ BACKGROUND ANIMATION ------------------ */
+
+        .bg-blobs {
+          position: absolute;
+          inset: 0;
+          overflow: hidden;
+          z-index: 0;
+        }
+
+        .blob {
+          position: absolute;
+          width: 400px;
+          height: 400px;
+          border-radius: 50%;
+          filter: blur(120px);
+          opacity: 0.6;
+          animation: float 12s ease-in-out infinite;
+        }
+
+        .blob1 {
+          background: #6366f1;
+          top: -100px;
+          left: -100px;
+        }
+
+        .blob2 {
+          background: #22d3ee;
+          bottom: -150px;
+          right: -100px;
+          animation-delay: 4s;
+        }
+
+        .blob3 {
+          background: #f472b6;
+          top: 50%;
+          left: 60%;
+          animation-delay: 8s;
+        }
+
+        @keyframes float {
+          0% { transform: translate(0, 0) scale(1); }
+          50% { transform: translate(50px, -40px) scale(1.1); }
+          100% { transform: translate(0, 0) scale(1); }
+        }
+
+        /* ------------------ CARD ------------------ */
+
+        .auth-card {
+          position: relative;
+          z-index: 2;
+          width: 100%;
+          max-width: 420px;
+          background: rgba(255,255,255,0.8);
+          backdrop-filter: blur(20px);
+          border-radius: 24px;
+          padding: 50px 40px;
+          box-shadow: 0 40px 80px rgba(0,0,0,0.08);
+          text-align: center;
+        }
+
+        .logo {
+          font-size: 28px;
+          margin-bottom: 20px;
+        }
+
+        h1 {
+          font-size: 28px;
+          font-weight: 700;
+          margin-bottom: 8px;
+        }
+
+        p {
+          font-size: 14px;
+          color: #6b7280;
+          margin-bottom: 30px;
+        }
+
+        form {
+          display: flex;
+          flex-direction: column;
+          gap: 18px;
+        }
+
+        input {
+          padding: 14px 16px;
+          border-radius: 14px;
+          border: 1px solid #e5e7eb;
+          font-size: 14px;
+          transition: 0.2s;
+        }
+
+        input:focus {
+          border-color: #6366f1;
+          box-shadow: 0 0 0 3px rgba(99,102,241,0.15);
+          outline: none;
+        }
+
+        button {
+          margin-top: 6px;
+          padding: 14px;
+          border-radius: 14px;
+          border: none;
+          background: #111827;
+          color: white;
+          font-weight: 600;
+          cursor: pointer;
+          transition: 0.2s;
+        }
+
+        button:hover {
+          background: #1f2937;
+        }
+
+        button:disabled {
+          opacity: 0.6;
+          cursor: not-allowed;
+        }
+
+        .error {
+          font-size: 13px;
+          color: #dc2626;
+          background: #fee2e2;
+          padding: 10px;
+          border-radius: 10px;
+        }
+
+        .switch {
+          margin-top: 24px;
+          font-size: 14px;
+        }
+
+        .switch span {
+          font-weight: 600;
+          color: #6366f1;
+          cursor: pointer;
+        }
+
+        @media(max-width: 480px){
+          .auth-card {
+            padding: 35px 25px;
+          }
+
+          .blob {
+            width: 250px;
+            height: 250px;
+          }
+        }
+      `}</style>
         </div>
     );
 };
