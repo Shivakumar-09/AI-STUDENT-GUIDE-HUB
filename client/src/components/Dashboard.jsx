@@ -70,7 +70,7 @@ const Dashboard = ({ user }) => {
                             </p>
 
                             <div style={styles.actionRow}>
-                                <button onClick={() => navigate("/roadmap")} style={styles.primaryBtn}>
+                                <button onClick={() => navigate("/courses")} style={styles.primaryBtn}>
                                     Start Session <ArrowRight size={18} />
                                 </button>
                                 <div style={{ fontSize: '0.85rem', color: '#64748b', fontWeight: 600 }}>
