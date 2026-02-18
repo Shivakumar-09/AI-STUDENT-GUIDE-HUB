@@ -13,6 +13,8 @@ import Opportunities from './components/Opportunities';
 import Courses from './components/Courses';
 import Auth from './components/Auth';
 
+console.log("App component loaded");
+
 function App() {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -41,9 +43,10 @@ function App() {
   if (loading) return (
     <div className="d-flex justify-content-center align-items-center" style={{ minHeight: '100vh' }}>
       <div className="text-center">
-        <div className="spinner-border text-primary" role="status">
-          <span className="visually-hidden">Loading...</span>
+        <div className="spinner-border text-primary mb-3" role="status">
+          <span className="visually-hidden">Loading AI Hub...</span>
         </div>
+        <h5 className="text-muted fw-light">Preparing your cockpit...</h5>
       </div>
     </div>
   );
