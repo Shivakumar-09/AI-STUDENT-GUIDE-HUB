@@ -159,7 +159,9 @@ const Auth = ({ onLogin }) => {
                                     transition={{ duration: 0.3 }}
                                 >
                                     <div className="input-group">
-                                        <label style={{ display: 'block', marginBottom: '10px', fontSize: '0.85rem', fontWeight: 700, color: 'var(--text-dim)', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Identity Name</label>
+                                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '10px' }}>
+                                            <label style={{ fontSize: '0.85rem', fontWeight: 700, color: 'var(--text-dim)', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Identity Name</label>
+                                        </div>
                                         <div style={{ position: 'relative' }}>
                                             <span style={{ position: 'absolute', left: '18px', top: '50%', transform: 'translateY(-50%)', opacity: 0.4, fontSize: '1.1rem' }}>👤</span>
                                             <input
@@ -178,7 +180,9 @@ const Auth = ({ onLogin }) => {
                         </AnimatePresence>
 
                         <div className="input-group">
-                            <label style={{ display: 'block', marginBottom: '10px', fontSize: '0.85rem', fontWeight: 700, color: 'var(--text-dim)', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Email Secure</label>
+                            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '10px' }}>
+                                <label style={{ fontSize: '0.85rem', fontWeight: 700, color: 'var(--text-dim)', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Email Secure</label>
+                            </div>
                             <div style={{ position: 'relative' }}>
                                 <span style={{ position: 'absolute', left: '18px', top: '50%', transform: 'translateY(-50%)', opacity: 0.4, fontSize: '1.1rem' }}>📧</span>
                                 <input
