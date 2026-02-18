@@ -222,6 +222,30 @@ const ROADMAP_DEFINITIONS = {
     }
 };
 
+/* -------------------- INDUSTRY STANDARD COURSES -------------------- */
+const INDUSTRY_COURSES = [
+    {
+        title: "AI Engineer 2026: Gen AI, Deep Learning & LLMs",
+        provider: "Udemy",
+        category: "Artificial Intelligence"
+    },
+    {
+        title: "Data Structures & Algorithms: Developer’s Guide",
+        provider: "Coursevania",
+        category: "Computer Science"
+    },
+    {
+        title: "Full-Stack AI Engineer Bootcamp",
+        provider: "Udemy",
+        category: "Web Engineering"
+    },
+    {
+        title: "AI & Cyber Security Mastery 2025",
+        provider: "Udemy",
+        category: "Cybersecurity"
+    }
+];
+
 /* -------------------- ROADMAP DETECTION -------------------- */
 
 const detectRoadmap = (track) => {
