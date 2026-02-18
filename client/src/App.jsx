@@ -46,7 +46,7 @@ function App() {
         <div className="spinner-border text-primary mb-3" role="status">
           <span className="visually-hidden">Loading AI Hub...</span>
         </div>
-        <h5 className="text-muted fw-light">Preparing your cockpit...</h5>
+        <h5 className="text-muted fw-light">Loading AI Student Hub...</h5>
       </div>
     </div>
   );
