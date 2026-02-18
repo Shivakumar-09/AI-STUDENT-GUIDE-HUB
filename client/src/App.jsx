@@ -38,7 +38,15 @@ function App() {
     checkAuth();
   }, [navigate]);
 
-  if (loading) return <div className="placeholder">Loading Road2Success...</div>;
+  if (loading) return (
+    <div className="d-flex justify-content-center align-items-center" style={{ minHeight: '100vh' }}>
+      <div className="text-center">
+        <div className="spinner-border text-primary" role="status">
+          <span className="visually-hidden">Loading...</span>
+        </div>
+      </div>
+    </div>
+  );
 
   const handleLogout = () => {
     localStorage.removeItem('token');
