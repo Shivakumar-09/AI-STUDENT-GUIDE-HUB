@@ -45,14 +45,15 @@
 
 ```mermaid
 graph TD
-    A[React 19 Frontend] -->|REST / JSON| B[Express.js API]
-    A <-->|Real-time Signals| C[Socket.io Server]
-    B -->|Sequelize ORM| D[(PostgreSQL Database)]
-    B -->|AI Requests| E[Google Gemini AI]
-    B -->|File Processing| F[Resume Parser]
+    A["React 19 Frontend"] -->|REST / JSON| B["Express.js API"]
+    A <-->|"Real-time Signals"| C["Socket.io Server"]
+    B -->|"Sequelize ORM"| D[("PostgreSQL Database")]
+    B -->|"AI Requests"| E["Google Gemini AI"]
+    B -->|"File Processing"| F["Resume Parser"]
+
     subgraph "Intelligent Features"
-    E
-    F
+        E
+        F
     end
 ```
 
