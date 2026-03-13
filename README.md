@@ -29,7 +29,7 @@ A comprehensive AI-powered career guidance platform for B.Tech students, featuri
 
 ### Backend
 - **Node.js** with Express
-- **MongoDB Atlas** for cloud database
+- **PostgreSQL** with Sequelize for database
 - **Google Gemini AI** for intelligent features
 - **Socket.io** for real-time updates
 - **JWT** for authentication
@@ -43,7 +43,7 @@ A comprehensive AI-powered career guidance platform for B.Tech students, featuri
 
 ### Prerequisites
 - Node.js (v16 or higher)
-- MongoDB Atlas account
+- PostgreSQL database
 - Google Gemini API key
 
 ### Setup
@@ -73,11 +73,14 @@ npm install
 Create a `.env` file in the `server` directory:
 ```env
 PORT=5000
-MONGODB_URI=your_mongodb_atlas_connection_string
+DATABASE_URL=your_postgresql_connection_string
 GEMINI_API_KEY=your_gemini_api_key
 NODE_ENV=development
 JWT_SECRET=your_jwt_secret
 ```
+
+> [!IMPORTANT]
+> When connecting from a local machine, ensure you use the **External Database URL** from your Render dashboard (not the Internal URL).
 
 4. **Run the application**
 
@@ -134,7 +137,7 @@ This project is licensed under the MIT License.
 ## 🙏 Acknowledgments
 
 - Google Gemini AI for powering the intelligent features
-- MongoDB Atlas for cloud database services
+- Render PostgreSQL for reliable cloud database services
 - The open-source community for amazing tools and libraries
 
 ---
