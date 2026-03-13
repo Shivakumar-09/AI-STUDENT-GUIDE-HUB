@@ -51,9 +51,9 @@ app.use(express.json());
 
 // PostgreSQL Connection is handled in config/database.js and synced above
 // But we can authenticate to check connection
-sequelize.authenticate()
-    .then(() => console.log('Connected to PostgreSQL via Sequelize'))
-    .catch(err => console.error('PostgreSQL connection error:', err));
+sequelize.sync({ alter: true })
+    .then(() => console.log('Database synced and connected to PostgreSQL'))
+    .catch(err => console.error('PostgreSQL sync/connection error:', err));
 
 // ------------------------
 // Socket.io Real-time
