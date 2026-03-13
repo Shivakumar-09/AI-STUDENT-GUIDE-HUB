@@ -3,17 +3,9 @@
 <div align="center">
 
 # 🚀 AI STUDENT GUIDE HUB
-### *The Ultimate Career Architect for B.Tech Students*
+### *Accelerating Engineering Excellence*
 
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![Node.js](https://img.shields.io/badge/Node.js-v16+-339933?style=flat&logo=node.js&logoColor=white)](https://nodejs.org/)
-[![React](https://img.shields.io/badge/React-19-61DAFB?style=flat&logo=react&logoColor=black)](https://reactjs.org/)
-[![PostgreSQL](https://img.shields.io/badge/PostgreSQL-Managed-4169E1?style=flat&logo=postgresql&logoColor=white)](https://www.postgresql.org/)
-[![Gemini AI](https://img.shields.io/badge/Powered%20By-Gemini%20AI-orange?style=flat&logo=google-gemini&logoColor=white)](https://ai.google.dev/)
-
-**Empowering the next generation of engineers with AI-driven insights, personalized roadmaps, and real-time career intelligence.**
-
-[Explore Features](#-key-pillars) • [Getting Started](#-installation) • [Architecture](#-system-architecture) • [Contributing](#-contributing)
+> **Seamlessly bridging the gap between academic learning and industry mastery through the power of Generative AI.**
 
 </div>
 
