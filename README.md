@@ -1,6 +1,6 @@
-![AI Student Guide Hub Banner](./assets/banner.png)
-
 <div align="center">
+
+![AI Student Guide Hub Banner](./assets/banner.png)
 
 # 🚀 AI STUDENT GUIDE HUB
 ### *Accelerating Engineering Excellence*
