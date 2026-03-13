@@ -43,19 +43,11 @@
 
 ## 🏗️ System Architecture
 
-```mermaid
-graph TD
-    A["React 19 Frontend"] -->|REST / JSON| B["Express.js API"]
-    A <-->|"Real-time Signals"| C["Socket.io Server"]
-    B -->|"Sequelize ORM"| D[("PostgreSQL Database")]
-    B -->|"AI Requests"| E["Google Gemini AI"]
-    B -->|"File Processing"| F["Resume Parser"]
+<div align="center">
 
-    subgraph "Intelligent Features"
-        E
-        F
-    end
-```
+![System Architecture](./assets/architecture.png)
+
+</div>
 
 ---
 
