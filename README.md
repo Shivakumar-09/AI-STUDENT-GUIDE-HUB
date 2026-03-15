@@ -5,17 +5,6 @@
 **A full-stack, AI-powered career accelerator platform built for B.Tech students.**
 Get personalized mentorship, dynamic roadmaps, mock interviews, and real-time market intelligence — all in one place.
 
-<br/>
-
-![Status](https://img.shields.io/badge/Status-Active-brightgreen?style=for-the-badge)
-![React](https://img.shields.io/badge/React-19-61DAFB?style=for-the-badge&logo=react&logoColor=black)
-![Node.js](https://img.shields.io/badge/Node.js-v16+-339933?style=for-the-badge&logo=nodedotjs&logoColor=white)
-![PostgreSQL](https://img.shields.io/badge/PostgreSQL-Latest-4169E1?style=for-the-badge&logo=postgresql&logoColor=white)
-![Gemini AI](https://img.shields.io/badge/Gemini_Pro-AI--Powered-FF6F00?style=for-the-badge&logo=google&logoColor=white)
-![License: MIT](https://img.shields.io/badge/License-MIT-yellow?style=for-the-badge)
-
-<br/>
-
 [🚀 Features](#-features) &nbsp;•&nbsp;
 [🏗️ Architecture](#️-system-architecture) &nbsp;•&nbsp;
 [🛠️ Tech Stack](#️-tech-stack) &nbsp;•&nbsp;
