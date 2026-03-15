@@ -1,26 +1,28 @@
 <div align="center">
 
-<img src="./banner.png" alt="AI Student Guide Hub Banner" width="100%" />
-
-<br/>
-
 # 🎓 AI Student Guide Hub
 
-**A full-stack, AI-powered career accelerator platform built for B.Tech students.**  
+**A full-stack, AI-powered career accelerator platform built for B.Tech students.**
 Get personalized mentorship, dynamic roadmaps, mock interviews, and real-time market intelligence — all in one place.
 
 <br/>
 
-[![Status](https://img.shields.io/badge/Status-Active-brightgreen?style=for-the-badge)](https://github.com/Shivakumar-09/AI-STUDENT-GUIDE-HUB)
-[![React](https://img.shields.io/badge/React-19-61DAFB?style=for-the-badge&logo=react&logoColor=black)](https://react.dev/)
-[![Node.js](https://img.shields.io/badge/Node.js-v16+-339933?style=for-the-badge&logo=nodedotjs&logoColor=white)](https://nodejs.org/)
-[![PostgreSQL](https://img.shields.io/badge/PostgreSQL-Latest-4169E1?style=for-the-badge&logo=postgresql&logoColor=white)](https://www.postgresql.org/)
-[![Gemini AI](https://img.shields.io/badge/Gemini_Pro-AI--Powered-FF6F00?style=for-the-badge&logo=google&logoColor=white)](https://ai.google.dev/)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow?style=for-the-badge)](LICENSE)
+![Status](https://img.shields.io/badge/Status-Active-brightgreen?style=for-the-badge)
+![React](https://img.shields.io/badge/React-19-61DAFB?style=for-the-badge&logo=react&logoColor=black)
+![Node.js](https://img.shields.io/badge/Node.js-v16+-339933?style=for-the-badge&logo=nodedotjs&logoColor=white)
+![PostgreSQL](https://img.shields.io/badge/PostgreSQL-Latest-4169E1?style=for-the-badge&logo=postgresql&logoColor=white)
+![Gemini AI](https://img.shields.io/badge/Gemini_Pro-AI--Powered-FF6F00?style=for-the-badge&logo=google&logoColor=white)
+![License: MIT](https://img.shields.io/badge/License-MIT-yellow?style=for-the-badge)
 
 <br/>
 
-[🚀 Features](#-features) • [🛠️ Tech Stack](#️-tech-stack) • [📂 Project Structure](#-project-structure) • [💻 Getting Started](#-getting-started) • [🔑 Environment Variables](#-environment-variables) • [👨‍💻 Admin Scripts](#-admin-scripts) • [🤝 Contributing](#-contributing)
+[🚀 Features](#-features) &nbsp;•&nbsp;
+[🏗️ Architecture](#️-system-architecture) &nbsp;•&nbsp;
+[🛠️ Tech Stack](#️-tech-stack) &nbsp;•&nbsp;
+[📂 Project Structure](#-project-structure) &nbsp;•&nbsp;
+[💻 Getting Started](#-getting-started) &nbsp;•&nbsp;
+[🔑 Environment Variables](#-environment-variables) &nbsp;•&nbsp;
+[🤝 Contributing](#-contributing)
 
 </div>
 
@@ -68,12 +70,10 @@ Stay ahead of the curve with live, socket-driven career intelligence:
 - Powered by **Socket.IO** for zero-latency data streams
 
 ### 💼 Live Internships & Hackathons
-Access a curated, up-to-date database of:
-- Active internship postings from top tech companies
-- Competitive hackathons relevant to B.Tech students
+Access a curated, up-to-date database of active internship postings and competitive tech hackathons relevant to B.Tech students.
 
 ### 🏅 Leaderboard System
-Gamified learning with a real-time leaderboard. Earn points through quizzes, mock interviews, and platform activities, then compete and rank against peers.
+Gamified learning with a real-time leaderboard. Earn points through quizzes, mock interviews, and platform activities, then rank against peers.
 
 ### 🔐 Secure Authentication & RBAC
 - **JWT-based authentication** for stateless, scalable security
@@ -82,29 +82,82 @@ Gamified learning with a real-time leaderboard. Earn points through quizzes, moc
 
 ---
 
+## 🏗️ System Architecture
+
+> **How to display the diagram:** Upload `architecture.png` to your repository root alongside this README. GitHub will render it automatically.
+
+![AI Student Guide Hub — System Architecture](./architecture.png)
+
+### Layer Overview
+
+```
+┌─────────────────────────────────────────────────────────────────────┐
+│                         CLIENT LAYER                                │
+│   Student Portal  │  Admin Portal  │  Mock Interview  │  Leaderboard│
+│         (React 19 + Vite + Framer Motion + Socket.IO Client)        │
+└───────────────────────────┬─────────────────────────────────────────┘
+                            │  HTTPS REST + WebSocket
+┌───────────────────────────▼─────────────────────────────────────────┐
+│                  API GATEWAY  (Express v5 + Node.js)                │
+│  /auth  │  /ai/mentor  │  /ai/roadmap  │  /ai/interview             │
+│  /resume/analyze  │  /quiz/generate  │  /leaderboard  │  /internships│
+└──────────┬──────────────────┬──────────────────────────┬────────────┘
+           │                  │                          │
+┌──────────▼──────┐  ┌────────▼────────┐      ┌─────────▼──────────┐
+│  AI SERVICES    │  │  DATA LAYER     │      │  CROSS-CUTTING      │
+│  Google Gemini  │  │  PostgreSQL     │      │  JWT Auth           │
+│  ─ Text gen     │  │  Sequelize ORM  │      │  Encryption at rest │
+│  ─ Roadmaps     │  │  ─ Users        │      │  Socket.IO          │
+│  ─ Interview    │  │  ─ Admins       │      │  multer + pdf-parse │
+│  ─ Resume score │  │  ─ Leaderboard  │      │  CORS + RBAC        │
+│  ─ MCQ quizzes  │  │  ─ Internships  │      │  Error Handling     │
+└─────────────────┘  └─────────────────┘      └────────────────────┘
+```
+
+### Request Data Flow
+
+```
+Browser
+  │
+  ├── REST Request ──► Express Router ──► JWT Middleware
+  │                                            │
+  │                                            ▼
+  │                                    Route Handler
+  │                                    ├── Gemini API call  ──► AI Response
+  │                                    ├── Sequelize query  ──► PostgreSQL
+  │                                    └── File parse       ──► pdf-parse
+  │
+  └── WebSocket ──► Socket.IO Server ──► Real-time broadcast ──► All clients
+```
+
+---
+
 ## 🛠️ Tech Stack
 
 ### Frontend
+
 | Technology | Purpose |
 |---|---|
-| [React 19](https://react.dev/) + [Vite](https://vitejs.dev/) | UI framework and lightning-fast build tooling |
-| React Router DOM (v7) | Client-side routing and navigation |
+| [React 19](https://react.dev/) + [Vite](https://vitejs.dev/) | UI framework and fast HMR build tooling |
+| React Router DOM v7 | Client-side routing and navigation |
 | [Framer Motion](https://www.framer.com/motion/) | Fluid UI micro-interactions and animations |
-| [Socket.IO Client](https://socket.io/) | Real-time bidirectional event-based communication |
+| [Socket.IO Client](https://socket.io/) | Real-time bidirectional communication |
 | Axios | Promise-based HTTP client for API requests |
 | Lucide React | Consistent, modern icon library |
 
 ### Backend
+
 | Technology | Purpose |
 |---|---|
-| [Node.js](https://nodejs.org/) (v16+) + Express (v5) | Server runtime and REST API framework |
+| [Node.js](https://nodejs.org/) v16+ + Express v5 | Server runtime and REST API framework |
 | [Sequelize](https://sequelize.org/) + `pg` | ORM for PostgreSQL — models, migrations, queries |
 | `@google/generative-ai` | Gemini Pro integration for all AI-powered features |
 | `jsonwebtoken` + `bcryptjs` | Secure JWT authentication and password hashing |
-| `multer` + `pdf-parse` | File upload handling and resume PDF text extraction |
-| [Socket.IO Server](https://socket.io/) | Real-time server-side event broadcasting |
+| `multer` + `pdf-parse` | File upload handling and PDF resume text extraction |
+| [Socket.IO](https://socket.io/) Server | Real-time server-side event broadcasting |
 
 ### Database & Infrastructure
+
 | Technology | Purpose |
 |---|---|
 | [PostgreSQL](https://www.postgresql.org/) | Primary relational database |
@@ -157,13 +210,11 @@ AI-STUDENT-GUIDE-HUB/
 
 ### Prerequisites
 
-Make sure the following are installed and running on your machine:
+Make sure the following are installed and running on your machine before you begin:
 
 - **Node.js** v16 or higher → [Download](https://nodejs.org/)
 - **PostgreSQL** → [Download](https://www.postgresql.org/download/)
 - A valid **Google Gemini API Key** → [Get one here](https://ai.google.dev/)
-
----
 
 ### 1. Clone the Repository
 
@@ -172,8 +223,6 @@ git clone https://github.com/Shivakumar-09/AI-STUDENT-GUIDE-HUB.git
 cd AI-STUDENT-GUIDE-HUB
 ```
 
----
-
 ### 2. Setup the Backend
 
 ```bash
@@ -181,20 +230,18 @@ cd server
 npm install
 ```
 
-Create a `.env` file in the `server/` directory (see [Environment Variables](#-environment-variables) below), then start the server:
+Create your `.env` file (see [Environment Variables](#-environment-variables) section), then start the server:
 
 ```bash
 npm start
 ```
 
-> ✅ Sequelize will automatically sync all database tables on startup.  
-> 🌐 Server runs at: `http://localhost:5000`
-
----
+> ✅ Sequelize auto-syncs all database tables on startup.
+> 🌐 Server runs at: **`http://localhost:5000`**
 
 ### 3. Setup the Frontend
 
-Open a **new terminal**, then:
+Open a **new terminal**, then run:
 
 ```bash
 cd client
@@ -202,42 +249,42 @@ npm install
 npm run dev
 ```
 
-> 🌐 Client runs at: `http://localhost:5173` — open this URL in your browser.
+> 🌐 Client runs at: **`http://localhost:5173`** — open this in your browser.
 
 ---
 
 ## 🔑 Environment Variables
 
-Create a `.env` file inside the `server/` directory with the following keys:
+Create a `.env` file inside the `server/` directory with the following content:
 
 ```env
-# ── Server ─────────────────────────────────────────────
+# ── Server ──────────────────────────────────────────
 PORT=5000
 NODE_ENV=development
 FRONTEND_URL=http://localhost:5173
 
-# ── PostgreSQL Database ─────────────────────────────────
+# ── PostgreSQL Database ──────────────────────────────
 DB_NAME=your_database_name
 DB_USER=postgres
 DB_PASSWORD=your_postgres_password
 DB_HOST=localhost
 DB_PORT=5432
 
-# ── Security & Authentication ───────────────────────────
+# ── Security & Authentication ────────────────────────
 JWT_SECRET=your_super_secret_jwt_key
 ENCRYPTION_KEY=your_32_byte_hex_encryption_key
 
-# ── External APIs ───────────────────────────────────────
+# ── External APIs ────────────────────────────────────
 GEMINI_API_KEY=your_gemini_api_key
 ```
 
-> ⚠️ **Never commit your `.env` file.** Add it to your `.gitignore` immediately.
+> ⚠️ **Never commit your `.env` file.** Add `server/.env` to your `.gitignore` immediately.
 
 ---
 
 ## 👨‍💻 Admin Scripts
 
-The server ships with secure scripts for provisioning admin accounts. Run them from the `server/` directory:
+Provision and manage admin accounts from the `server/` directory:
 
 ```bash
 # Create a new admin user
@@ -249,21 +296,21 @@ node forceUpdateAdmin.js
 
 ---
 
-## 🔌 API Highlights
+## 🔌 API Reference
 
-| Method | Endpoint | Description |
-|--------|----------|-------------|
-| `POST` | `/api/auth/register` | Register a new student account |
-| `POST` | `/api/auth/login` | Authenticate and receive a JWT |
-| `POST` | `/api/ai/mentor` | Query the AI Mentor (Gemini) |
-| `POST` | `/api/ai/roadmap` | Generate a personalized study roadmap |
-| `POST` | `/api/ai/interview` | Start or continue a mock interview session |
-| `POST` | `/api/resume/analyze` | Upload and analyze a PDF resume |
-| `POST` | `/api/quiz/generate` | Generate a topic-specific MCQ quiz |
-| `GET`  | `/api/leaderboard` | Fetch the current leaderboard rankings |
-| `GET`  | `/api/internships` | List active internship opportunities |
+| Method | Endpoint | Auth | Description |
+|--------|----------|:----:|-------------|
+| `POST` | `/api/auth/register` | ❌ | Register a new student account |
+| `POST` | `/api/auth/login` | ❌ | Authenticate and receive a JWT |
+| `POST` | `/api/ai/mentor` | ✅ | Query the AI Mentor (Gemini) |
+| `POST` | `/api/ai/roadmap` | ✅ | Generate a personalized study roadmap |
+| `POST` | `/api/ai/interview` | ✅ | Start or continue a mock interview session |
+| `POST` | `/api/resume/analyze` | ✅ | Upload and analyze a PDF resume |
+| `POST` | `/api/quiz/generate` | ✅ | Generate a topic-specific MCQ quiz |
+| `GET`  | `/api/leaderboard` | ✅ | Fetch the current leaderboard rankings |
+| `GET`  | `/api/internships` | ✅ | List active internship opportunities |
 
-> 🔒 All `/api/ai/*` and `/api/resume/*` routes require a valid `Authorization: Bearer <token>` header.
+> 🔒 Routes marked ✅ require the `Authorization: Bearer <token>` header.
 
 ---
 
@@ -273,9 +320,9 @@ Contributions, bug reports, and feature requests are always welcome!
 
 1. **Fork** the repository
 2. Create a new branch: `git checkout -b feature/your-feature-name`
-3. Make your changes and **commit**: `git commit -m 'feat: add your feature'`
-4. **Push** to your branch: `git push origin feature/your-feature-name`
-5. Open a **Pull Request** and describe your changes
+3. Commit your changes: `git commit -m 'feat: add your feature'`
+4. Push to your branch: `git push origin feature/your-feature-name`
+5. Open a **Pull Request** and describe your changes clearly
 
 Check the [Issues page](https://github.com/Shivakumar-09/AI-STUDENT-GUIDE-HUB/issues) for open tasks or to report a bug.
 
@@ -291,6 +338,8 @@ This project is licensed under the **MIT License** — see the [LICENSE](LICENSE
 
 **Built with ❤️ to empower the next generation of tech talent.**
 
-⭐ Star this repo if you found it useful • 🐛 [Report a Bug](https://github.com/Shivakumar-09/AI-STUDENT-GUIDE-HUB/issues) • 💡 [Request a Feature](https://github.com/Shivakumar-09/AI-STUDENT-GUIDE-HUB/issues)
+⭐ Star this repo if you found it useful &nbsp;•&nbsp;
+🐛 [Report a Bug](https://github.com/Shivakumar-09/AI-STUDENT-GUIDE-HUB/issues) &nbsp;•&nbsp;
+💡 [Request a Feature](https://github.com/Shivakumar-09/AI-STUDENT-GUIDE-HUB/issues)
 
 </div>
