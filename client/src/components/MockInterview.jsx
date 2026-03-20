@@ -270,7 +270,7 @@ const MockInterview = () => {
                             setVoiceEnabled(!voiceEnabled);
                             if (voiceEnabled) window.speechSynthesis.cancel();
                         }} 
-                        className={`btn btn-sm ${voiceEnabled ? 'btn-primary bg-opacity-10 text-primary border-primary' : 'btn-outline-secondary'} rounded-pill fw-medium d-flex align-items-center gap-2 px-3`}
+                        className={`btn btn-sm ${voiceEnabled ? 'bg-primary bg-opacity-10 text-primary border border-primary' : 'btn-outline-secondary'} rounded-pill fw-medium d-flex align-items-center gap-2 px-3`}
                     >
                         <i className={`bi ${voiceEnabled ? 'bi-volume-up-fill' : 'bi-volume-mute-fill'}`}></i>
                         {voiceEnabled ? 'AI Voice On' : 'AI Voice Off'}
@@ -349,7 +349,8 @@ const MockInterview = () => {
                             value={input}
                             onChange={(e) => setInput(e.target.value)}
                             onKeyPress={(e) => e.key === 'Enter' && sendAnswer()}
-                            disabled={loading || isListening}
+                            disabled={loading}
+                            readOnly={isListening}
                             placeholder={isListening ? "Listening..." : "Type your answer or use the microphone..."}
                             className="form-control border-light shadow-none px-3"
                             style={{ backgroundColor: isListening ? '#fef2f2' : '#f8fafc', fontSize: '0.95rem' }}
