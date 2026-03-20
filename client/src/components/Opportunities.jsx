@@ -70,9 +70,7 @@ const Opportunities = () => {
         <div className="opportunities-hub" style={{ display: 'flex', flexDirection: 'column', gap: '32px' }}>
 
             {/* MARKET INTELLIGENCE DASHBOARD */}
-            <motion.section
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
+            <section
                 className="card"
                 style={{ padding: '24px 32px', background: 'linear-gradient(135deg, rgba(37, 99, 235, 0.05), transparent)' }}
             >
@@ -89,13 +87,11 @@ const Opportunities = () => {
                         </div>
                     ))}
                 </div>
-            </motion.section>
+            </section>
 
             {/* CAREER UPDATES BANNER */}
-            <motion.div
+            <div
                 id="opp-banner"
-                initial={{ opacity: 0, scale: 0.95 }}
-                animate={{ opacity: 1, scale: 1 }}
                 style={{
                     background: 'linear-gradient(90deg, #0ea5e9, #6366f1)',
                     borderRadius: '20px',
@@ -134,7 +130,7 @@ const Opportunities = () => {
                 >
                     JOIN UPDATES CHANNEL 🚀
                 </button>
-            </motion.div >
+            </div>
 
             {/* SEGMENTED NAVIGATION */}
             < div style={{ display: 'flex', justifyContent: 'center', maxWidth: '100%' }}>

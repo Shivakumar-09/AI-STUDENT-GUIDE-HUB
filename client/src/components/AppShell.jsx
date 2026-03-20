@@ -94,17 +94,7 @@ const AppShell = ({ children, onLogout }) => {
 
             {/* MAIN CONTENT */}
             <main style={styles.main} className="app-main-content">
-                <AnimatePresence mode="wait">
-                    <motion.div
-                        key={location.pathname}
-                        initial={{ opacity: 0, y: 6 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        exit={{ opacity: 0, y: -6 }}
-                        transition={{ duration: 0.25 }}
-                    >
-                        {children}
-                    </motion.div>
-                </AnimatePresence>
+                {children}
             </main>
 
             {/* MOBILE BOTTOM NAV */}

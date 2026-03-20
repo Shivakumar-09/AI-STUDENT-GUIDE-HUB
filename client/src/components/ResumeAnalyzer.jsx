@@ -48,19 +48,14 @@ const ResumeAnalyzer = () => {
             <div style={styles.backgroundBlur} />
 
             <div style={styles.container}>
-                <motion.div
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.6 }}
-                    style={styles.header}
-                >
+                <div style={styles.header}>
                     <h1 id="resume-title" style={styles.title}>
                         <span style={styles.titleGradient}>Resume Intelligence</span> Lab
                     </h1>
                     <p style={styles.subtitle}>
                         AI-powered analysis to align your profile with MAANG standards.
                     </p>
-                </motion.div>
+                </div>
 
                 <div id="resume-grid" style={styles.grid}>
                     {/* LEFT COLUMN: INPUT */}
@@ -120,12 +115,7 @@ const ResumeAnalyzer = () => {
                             </motion.button>
                         </motion.div>
 
-                        <motion.div
-                            initial={{ opacity: 0 }}
-                            animate={{ opacity: 1 }}
-                            transition={{ delay: 0.3 }}
-                            style={{ ...styles.glassCard, background: "linear-gradient(135deg, rgba(255,255,255,0.6), rgba(238,242,255,0.6))" }}
-                        >
+                        <div style={{ ...styles.glassCard, background: "linear-gradient(135deg, rgba(255,255,255,0.6), rgba(238,242,255,0.6))" }}>
                             <div style={styles.tipHeader}>
                                 <Sparkles size={16} color="#ca8a04" />
                                 <span style={styles.tipTitle}>Pro Tip</span>
@@ -133,7 +123,7 @@ const ResumeAnalyzer = () => {
                             <p style={styles.tipText}>
                                 Quantifying your achievements (e.g., "Reduced latency by 40%") can boost your ATS score by up to 25%.
                             </p>
-                        </motion.div>
+                        </div>
                     </div>
 
                     {/* RIGHT COLUMN: RESULTS */}

@@ -68,9 +68,7 @@ const Mentor = () => {
 
             {/* LEFT: STRATEGY & CONFIG */}
             <div className="mentor-sidebar" style={{ width: '320px', display: 'flex', flexDirection: 'column', gap: '24px' }}>
-                <motion.div
-                    initial={{ opacity: 0, x: -20 }}
-                    animate={{ opacity: 1, x: 0 }}
+                <div
                     className="card"
                     style={{ padding: '24px' }}
                 >
@@ -111,12 +109,9 @@ const Mentor = () => {
                             </button>
                         </div>
                     </div>
-                </motion.div>
+                </div>
 
-                <motion.div
-                    initial={{ opacity: 0, x: -20 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    transition={{ delay: 0.1 }}
+                <div
                     className="card"
                     style={{ padding: '24px', flex: 1 }}
                 >
@@ -137,7 +132,7 @@ const Mentor = () => {
                             </motion.button>
                         ))}
                     </div>
-                </motion.div>
+                </div>
             </div>
 
             {/* RIGHT: CHAT INTERFACE */}

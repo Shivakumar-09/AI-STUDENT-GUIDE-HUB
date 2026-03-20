@@ -587,13 +587,9 @@ const Roadmap = () => {
         <div style={{ minHeight: '100vh', background: '#fff' }}>
             {/* HERO */}
             <div style={{ textAlign: 'center', padding: '30px 30px' }}>
-                <motion.h1
-                    initial={{ opacity: 0, y: -10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    style={{ fontSize: '3.2rem', fontWeight: 800 }}
-                >
+                <h1 style={{ fontSize: '3.2rem', fontWeight: 800 }}>
                     Developer Roadmaps
-                </motion.h1>
+                </h1>
 
                 <p style={{ color: '#64748b', fontSize: '1.2rem' }}>
                     AI-guided learning paths tailored to your goals

@@ -110,11 +110,7 @@ const Quiz = () => {
 
             <div style={styles.container}>
                 {/* HEADER */}
-                <motion.div
-                    initial={{ opacity: 0, y: -20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    style={styles.header}
-                >
+                <div style={styles.header}>
                     <div style={styles.badge}>
                         <Zap size={14} fill="currentColor" /> Technical Interview Prep
                     </div>
@@ -122,14 +118,11 @@ const Quiz = () => {
                     <p style={styles.subtitle}>
                         Test your knowledge against MAANG standards.
                     </p>
-                </motion.div>
+                </div>
 
                 <div id="quiz-grid" style={styles.grid}>
                     {/* LEFT: MAIN QUIZ AREA */}
-                    <motion.div
-                        initial={{ opacity: 0, x: -20 }}
-                        animate={{ opacity: 1, x: 0 }}
-                        transition={{ delay: 0.1 }}
+                    <div
                         id="quiz-main-card"
                         style={styles.glassCard}
                     >
@@ -303,13 +296,10 @@ const Quiz = () => {
                         </AnimatePresence>
                         </div>
                         )}
-                    </motion.div>
+                    </div>
 
                     {/* RIGHT: LEADERBOARD */}
-                    <motion.div
-                        initial={{ opacity: 0, x: 20 }}
-                        animate={{ opacity: 1, x: 0 }}
-                        transition={{ delay: 0.2 }}
+                    <div
                         id="quiz-leaderboard"
                         style={styles.glassCard}
                     >
@@ -345,7 +335,7 @@ const Quiz = () => {
                                 ))
                             )}
                         </div>
-                    </motion.div>
+                    </div>
                 </div>
             </div>
 
