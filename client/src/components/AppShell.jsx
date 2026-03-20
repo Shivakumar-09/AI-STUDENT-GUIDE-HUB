@@ -20,11 +20,10 @@ const AppShell = ({ children, onLogout }) => {
 
     const navItems = [
         { path: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
-        { path: "/interview", label: "Interviews", icon: Mic },
         { path: "/courses", label: "Academy", icon: GraduationCap },
         { path: "/roadmap", label: "Roadmap", icon: Map },
         { path: "/resume", label: "Resume", icon: FileText },
-        { path: "/mentor", label: "AI Mentor", icon: BrainCircuit },
+        { path: "/interview", label: "Interviews", icon: Mic }, { path: "/mentor", label: "AI Mentor", icon: BrainCircuit },
         { path: "/opportunities", label: "Jobs", icon: Sparkles },
         { path: "/quiz", label: "Quiz", icon: Zap },
     ];
