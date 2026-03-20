@@ -20,10 +20,10 @@ const AppShell = ({ children, onLogout }) => {
 
     const navItems = [
         { path: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
+        { path: "/interview", label: "Interviews", icon: Mic },
         { path: "/courses", label: "Academy", icon: GraduationCap },
         { path: "/roadmap", label: "Roadmap", icon: Map },
         { path: "/resume", label: "Resume", icon: FileText },
-        { path: "/interview", label: "Interviews", icon: Mic },
         { path: "/mentor", label: "AI Mentor", icon: BrainCircuit },
         { path: "/opportunities", label: "Jobs", icon: Sparkles },
         { path: "/quiz", label: "Quiz", icon: Zap },
@@ -109,9 +109,10 @@ const AppShell = ({ children, onLogout }) => {
             </main>
 
             {/* MOBILE BOTTOM NAV */}
-            <div className="mobile-nav no-scrollbar" style={{
+            <div className="mobile-nav" style={{
                 ...styles.mobileBottomNav,
                 overflowX: 'auto',
+                WebkitOverflowScrolling: 'touch',
                 justifyContent: 'flex-start',
                 padding: '0 16px',
                 gap: '12px'

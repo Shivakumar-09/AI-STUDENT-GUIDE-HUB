@@ -238,7 +238,18 @@ const MockInterview = () => {
     }
 
     return (
-        <div className="h-100 d-flex flex-column" style={{ maxHeight: 'calc(100vh - 120px)' }}>
+        <>
+        <style>{`
+            .interview-container {
+                height: calc(100vh - 120px);
+            }
+            @media (max-width: 1024px) {
+                .interview-container {
+                    height: calc(100vh - 220px);
+                }
+            }
+        `}</style>
+        <div className="d-flex flex-column interview-container">
             <div className="d-flex justify-content-between align-items-center mb-3 p-3 bg-white rounded-4 shadow-sm border border-light">
                 <div className="d-flex align-items-center gap-3">
                     <div className="position-relative">
@@ -355,6 +366,7 @@ const MockInterview = () => {
                 </div>
             </div>
         </div>
+        </>
     );
 };
 
